@@ -25,7 +25,8 @@ $(function(ready){
         const text = $('input[name="is_teacher"]').prop('checked')? "شماره استادی" : "شماره دانشجویی";        
         $("label[for='identifier']").text(text);
     });
-
+    console.log("test");
+    
 
     if (document.location.href.indexOf("edit_exam")){
         append_question_to_page($("<i class='d-none'>"), $("body"));
@@ -292,10 +293,23 @@ $(function(ready){
     if ( $("#exam_timer").length ){
         const timer = $("#exam_timer");
         const duration = +timer.data('duration') || 1;
-        const start = new Date(+timer.data("unix")*1000 +  duration*60*1000).toLocaleString();
+        const start = new Date(+timer.data("unix")*1000 +  duration*60*1000);
+        start.setSeconds(0);
         timer.countdown({
-            date : start
-        })
+            date : start.toLocaleString(),
+            offset: +3.5
+        },()=>{
+            fetch("/complete_exam/"+$("input#exam_id").val())
+            .then(r=>r.json())
+            .then(data=>{
+                if (data.result == 'success'){
+                    document.location.href = "/exam_result/"+ $("input#exam_id").val();
+                    window.addEventListener('popstate', function (event) {
+                        history.pushState(null, document.title, location.href);
+                      });
+                }
+            });
+        });
     }
     $(".delete_question").off().click((e)=>{
         const form = $(e.target).parents("form");
@@ -309,9 +323,41 @@ $(function(ready){
     });
     $("button.submit_answer").off().click(e=>{
         const btn = $("button.submit_answer");
-        const qid = btn.data('id');
+        const qid = btn.data('qid');
+        const submit = +$("[name=answer]:checked").val();
+        fetch(`/submit_answer/${qid}/${submit}`)
+        .then(response => response.json())
+        .then(result => {
+            if (result.result == 'success'){
+                $('.text-success').removeClass('d-none');
+                $('li.current').addClass('active');
+            }
 
+            toastr[result.result](result.msg);
+        });
     });
+    $(".end_exam").off().click(e=>{
+        $("#end_exam_modal").modal("show");
+    });
+    $("#end_exam_modal").on('shown.bs.modal', function(){
+        $(this).find("button").off().click(e=>{
+            fetch("/complete_exam/"+$("input#exam_id").val())
+            .then(r=>r.json())
+            .then(data=>{
+                if (data.result == 'success'){
+                    document.location.href = "/exam_result/"+ $("input#exam_id").val();
+                    window.addEventListener('popstate', function (event) {
+                        history.pushState(null, document.title, location.href);
+                    });
+                }
+            });
+        });
+    });
+    if (window.location.href.indexOf('exam') > -1){
+        function disableBack() { window.history.forward(); }
+        setTimeout("disableBack()", 0);
+        window.onunload = function () { null };
+    }
 });
 function changeBackground(img){
     let preview_div = $(img).siblings("div.image_preview");

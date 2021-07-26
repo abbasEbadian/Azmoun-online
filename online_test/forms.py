@@ -45,21 +45,21 @@ class LoginForm(FlaskForm):
 class QuestionForm(FlaskForm):
     question_text = TextAreaField('متن سوال', validators=[DataRequired(message=empty_message)])
     image = FileField("تصویر")
-    answer_1 = StringField('گزینه 1', validators=[DataRequired(message=empty_message)], render_kw={"placeholder": "گزینه یک"})
-    answer_2 = StringField('گزینه 2', validators=[DataRequired(message=empty_message)], render_kw={"placeholder": "گزینه دو"})
-    answer_3 = StringField('گزینه 3', validators=[DataRequired(message=empty_message)], render_kw={"placeholder": "گزینه سه"})
-    answer_4 = StringField('گزینه 4', validators=[DataRequired(message=empty_message)], render_kw={"placeholder": "گزینه چهار"})
+    answer_1 = StringField('گزینه 1', validators=[DataRequired(message=empty_message)], render_kw={"placeholder": "گزینه یک", "autocomplete": "off"})
+    answer_2 = StringField('گزینه 2', validators=[DataRequired(message=empty_message)], render_kw={"placeholder": "گزینه دو", "autocomplete": "off"})
+    answer_3 = StringField('گزینه 3', validators=[DataRequired(message=empty_message)], render_kw={"placeholder": "گزینه سه", "autocomplete": "off"})
+    answer_4 = StringField('گزینه 4', validators=[DataRequired(message=empty_message)], render_kw={"placeholder": "گزینه چهار", "autocomplete": "off"})
     currect_answer = SelectField('گزینه صحیح', choices=[(1, "گزینه 1"), (2, "گزینه 2"), (3, "گزینه 3"), (4, "گزینه 4")])
 def get_courses():
     return Course.query.filter_by(teacher=current_user).all()
 
 class ExamForm(FlaskForm):
-    title = StringField('عنوان آزمون',  render_kw={"placeholder": "آزمون میانترم ساختمان داده"})
+    title = StringField('عنوان آزمون',  render_kw={"placeholder": "آزمون میانترم ساختمان داده", "autocomplete": "off"})
     course = QuerySelectField('درس مربوطه', query_factory=get_courses,
                                 get_pk=lambda a: a.id,
                                 get_label=lambda a: a.name)
-    datetime = DateTimeField("تاریخ برگزاری")
-    duration = IntegerField("مهلت آزمون ( دقیقه )")
+    datetime = DateTimeField("تاریخ برگزاری", render_kw={"autocomplete": "off"})
+    duration = IntegerField("مهلت آزمون ( دقیقه )", render_kw={"autocomplete": "off"})
     date_unix = HiddenField("", id="date_unix",validators=[DataRequired(message='تاریخ پایان نمیتواند خالی باشد.')])
 
     

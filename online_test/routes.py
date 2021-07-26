@@ -64,9 +64,10 @@ def teacher(menu_name=None, param1=None):
     
     if param1:
         editable_exam = Exam.query.get(param1)
-        data["the_exam"] = editable_exam
-        if editable_exam.course.teacher.id != current_user.id:
-            return forbidden403(403)
+        if editable_exam:
+            data["the_exam"] = editable_exam
+            if editable_exam.course.teacher.id != current_user.id:
+                return forbidden403(403)
     return render_template(f"/teacher/{menu_name}.html", **data)
 
 
@@ -343,18 +344,27 @@ def delete_exam(exam_id):
 @app.route("/exam/<exam_id>")
 @login_required
 def exam(exam_id):
-    exam = Exam.query.get(int(exam_id))
-    if exam.is_ongoing():
-        return redirect(url_for('exam_q', exam_id=exam.id, question_index=1))
+    exam = Exam.query.get(int(exam_id))      
+    if exam and exam not in current_user.courses_of_student:
+        return redirect(url_for('student'))  
+    if exam and exam in current_user.completed_exams:
+        return redirect(url_for('exam_result', exam_id=exam_id))
+    if exam and exam.is_ongoing():
+        return redirect(url_for('exam_q', exam_id=exam.id, question_index=1, source="main"))
+    
     return render_template('exam.html', exam=exam)
     
 @app.route("/exam/<exam_id>/question/<question_index>")
 @login_required
-def exam_q(exam_id, question_index):
+def exam_q(exam_id, question_index, source=""):
+    if source != "main":
+        return redirect(url_for('exam', exam_id=exam_id))
     question_index = int(question_index)
     exam = Exam.query.get(int(exam_id))
-    if not exam.is_ongoing():
+    if not exam or not exam.is_ongoing():
         return redirect(url_for('exam', exam_id=exam_id))
+    if exam in current_user.completed_exams:
+        return redirect(url_for('exam_result', exam_id=exam_id))
     question = None
     def red(q):
         return redirect(url_for('exam_q', exam_id=exam_id, question_index=q))
@@ -365,7 +375,12 @@ def exam_q(exam_id, question_index):
         return red(len(exam.questions))
     else:
         question = exam.questions[question_index-1]
-    return render_template('exam_main.html', exam=exam, question=question, question_index=question_index)
+    data = dict(exam=exam, question=question, question_index=question_index)
+    answers = {idx : Answer.query.filter_by(student=current_user, question=q).first() for idx,q in enumerate(exam.questions)}
+    data["answers"] = answers
+    if answers[question_index-1]:
+        data["answer"] = answers[question_index-1].value
+    return render_template('exam_main.html', **data)
 
 
 @app.route('/submit_answer/<question_id>/<answer>', methods=["GET", "POST"])
@@ -373,9 +388,35 @@ def exam_q(exam_id, question_index):
 def submit_answer(question_id, answer):
     question = Question.query.get(int(question_id))
     exam = question.exam
-    ans = Answer.query.filter(student=current_user, exam=exam, question=question).first()
+    if exam in current_user.completed_exams:
+        return redirect(url_for('exam_result', exam_id=exam.id))
+    ans = Answer.query.filter(Answer.student==current_user, Answer.exam==exam, Answer.question==question).first()
     if not ans:
-        ans = Answer(student=current_user, exam=exam, question=question, answer=int(answer))
+        ans = Answer(student=current_user, exam=exam, question=question, value=int(answer))
         db.session.add(ans)
     db.session.commit()
+
     return jsonify({"result": "success", "msg": "با موفقیت ثبت شد."})
+
+
+@app.route('/complete_exam/<exam_id>')
+@login_required
+def complete_exam(exam_id):
+    exam = Exam.query.get(int(exam_id))
+    current_user.completed_exams.append(exam)
+    db.session.commit()
+    return jsonify({"result": "success"})
+
+
+@app.route('/exam_result/<exam_id>')
+@login_required
+def exam_result(exam_id):
+    exam = db.session.query(Exam).get(int(exam_id))
+    if not exam or  exam not in current_user.completed_exams or exam.date > datetime.now():
+        return redirect(url_for('exam', exam_id=exam_id))
+    ans = list(filter(lambda x: x.exam.id == int(exam_id) , current_user.answers))
+    currect = sum([a.is_currect for a in ans])
+    total = len(ans)
+    point = 12 / (total or 1) * currect 
+
+    return render_template("exam_result.html", point=point, exam=exam, currect=currect, total=total)

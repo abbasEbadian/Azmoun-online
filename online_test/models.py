@@ -15,6 +15,10 @@ enrolls = db.Table('enrolls',
    db.Column('course_id', db.Integer, db.ForeignKey('course.id')),
 )
 
+completed_exams = db.Table('completed_exams',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('exam_id', db.Integer, db.ForeignKey('exam.id'))
+)
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False) # Full name
@@ -25,6 +29,7 @@ class User(db.Model, UserMixin):
     answers = db.relationship("Answer", backref="student")
     courses_of_teacher = db.relationship('Course', backref="teacher")
     courses_of_student = db.relationship('Course', secondary=enrolls, backref=db.backref("enrolled_students", lazy="dynamic"))
+    completed_exams = db.relationship('Exam', secondary=completed_exams, backref=db.backref("completed_students", lazy="dynamic"))
     create_date = db.Column(db.DateTime, default=datetime.utcnow)
 
     @property
@@ -91,7 +96,6 @@ class Exam(db.Model):
 
     def is_ongoing(self):
         secs = (datetime.fromtimestamp(int(self.unix)) - datetime.now()).total_seconds()
-        print(secs < 0 , secs + (self.duration * 60) > 0  )
         return  secs < 0 and secs + (self.duration * 60) > 0  
     
 
@@ -119,5 +123,5 @@ class Answer(db.Model):
 
     @property
     def is_currect(self):
-        c = Exam.query.get(self.exam_id)
-        return self.value == c.currect_answer
+        q = self.question
+        return self.value == q.currect_answer

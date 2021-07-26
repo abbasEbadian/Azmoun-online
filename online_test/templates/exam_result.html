@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% if not exam %}
+    <h1>آزمون یافت نشد.</h1>
+{% else %}
+    {% block title %}
+    نتیجه آزمون {{ exam.name }}
+    {% endblock  %}
+    
+    {% block main %}
+        <div class="exam_page w-100 h-100 d-flex justify-content-center align-items-center flex-column" >        
+            {% if not exam %}
+                <h1 class="text-center">آزمون یافت نشد.</h1>
+            {% else %}
+            <div class="details">
+                <h3 class="border-bottom pb-2">{{ exam.name }}</h3>
+                <h3 class="text-center">{{ currect }} جواب درست از {{ total }} سوال</h3>
+                <h2 class="text-center my-3">
+                    نمره شما: 
+                    <span class="text-success">{{ point }}</span>
+                </h2>
+            </div>
+            {% endif %}
+        </div>
+        {% endblock %}
+        {% endif  %}

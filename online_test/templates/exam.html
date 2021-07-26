@@ -8,6 +8,9 @@
     
     {% block main %}
         <div class="exam_page w-100 h-100 d-flex justify-content-center align-items-center flex-column" >        
+            {% if not exam %}
+                <h1 class="text-center">آزمون یافت نشد.</h1>
+            {% else %}
             <div class="details">
                 <h3>{{ exam.name }}</h3>
                 {% if exam.unix | not_started %}
@@ -21,6 +24,7 @@
                 <h2 class="text-center">زمان آزمون به پایان رسیده است.</h2>
                 {% endif %}
             </div>
+            {% endif %}
         </div>
-    {% endblock %}
-{% endif  %}
+        {% endblock %}
+        {% endif  %}

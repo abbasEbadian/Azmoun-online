@@ -6,6 +6,7 @@
 
 {% block main %}
     <div class="exam_main row">
+        <input id="exam_id" type="hidden" value="{{ exam.id }}"/>
         <div class="sidebar col-3">
             <div class="sidebar_items d-flex flex-column justify-content-center h-100">
                 <div class="sidebar_item d-flex flex-column">
@@ -49,26 +50,26 @@
                 <div class="row">
                     <div class="col-8 options_container">
                         <div class="form-check my-3">
-                            <input class="form-check-input" type="radio" name="answer" id="answer1" value="1">
+                            <input class="form-check-input" type="radio" name="answer" id="answer1"  autocomplete='off'  value="1" {% if answer and answer == 1 %}checked{% endif %}>
                             <label class="form-check-label" for="answer1">
                                 {{ question.answer_1 }}
                             </label>
                         </div>
                         <div class="form-check mb-3">
-                            <input class="form-check-input" type="radio" name="answer" id="answer2" value="2">
+                            <input class="form-check-input" type="radio" name="answer" id="answer2"  autocomplete='off'  value="2" {% if answer and answer == 2 %}checked{% endif %}>
                             <label class="form-check-label" for="answer2">
                                 {{ question.answer_2 }}
                             </label>
                         </div>
                         <div class="form-check mb-3">
-                            <input class="form-check-input" type="radio" name="answer" id="answer3" value="3">
+                            <input class="form-check-input" type="radio" name="answer" id="answer3"  autocomplete='off' value="3" {% if answer and answer == 3 %}checked{% endif %}>
                             <label class="form-check-label" for="answer3">
                                 {{ question.answer_3 }}
                             </label>
                         </div>
                         
                         <div class="form-check mb-3">
-                            <input class="form-check-input" type="radio" name="answer" id="answer4" value="4">
+                            <input class="form-check-input" type="radio" name="answer" id="answer4"  autocomplete='off' value="4" {% if answer and answer == 4 %}checked{% endif %}>
                             <label class="form-check-label" for="answer4">
                                 {{ question.answer_4 }}
                             </label>
@@ -81,7 +82,7 @@
                     </div>
                 </div>
                 <div class="mt-4">
-                    <button class="btn btn-main submit_answer" data-qid="{{ question.id }}">ثبت پاسخ</button>
+                    <button class="btn btn-main submit_answer" data-qid="{{ question.id }}">{{ answer and 'بروزرسانی پاسخ' or 'ثبت پاسخ'}}</button>
                 </div>
             </article>
             <div class="next_prev d-flex justify-content-between  align-items-center w-100 mx-auto my-4">
@@ -99,14 +100,33 @@
                 {% endif %}
             </div>
             <nav aria-label="questions">
-                <ul class="pagination pagination-md justify-content-center">
+                <ul class="pagination pagination-md justify-content-center flex-wrap">
                     {% for q in exam.questions %}
-                        <li class="page-item {{ loop.index == question_index and 'active' or ''}}" {% if loop.index == question_index  %}aria-current="page"{% endif %}>
+                        <li class="page-item {{ loop.index == question_index and 'current' or ''}} {{ answers[loop.index0] and answers[loop.index0].value and 'active' or '' }}" {% if loop.index == question_index  %}aria-current="page"{% endif %}>
                             <a class="page-link" href="/exam/{{ exam.id }}/question/{{ loop.index }}">{{ loop.index }}</a>
+                            <i class="bi-caret-up w-100 text-center d-block"></i>
                         </li>
                     {% endfor %}
                 </ul>
                 </nav>
         </div>
     </div>
+    <div class="modal " id="end_exam_modal"tabindex="-1">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">تایید </h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <p>آیا از  اتمام آزمون اطمینان دارید؟</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بازگشت به آزمون</button>
+                  <button type="button" class="btn btn-primary">اطمینان دارم</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
 {% endblock %}
