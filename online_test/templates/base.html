@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/toastr.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/master.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/datepicker.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bsicons.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/countdown.css')}}">
+    <title>{% block title%}{%endblock%}</title>
+</head>
+<body class="{{ body_class or ''}}">
+    {% include 'navbar.html' %}
+
+    {% block navigator %} {% endblock %}
+    {% block main %} {% endblock %}
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js" integrity="sha512-72WD92hLs7T5FAXn3vkNZflWG6pglUDDpm87TeQmfSg8KnrymL2G30R7as4FmTwhgu9H7eSzDCX3mjitSecKnw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{{ url_for('static', filename='js/toastr.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/date.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/datepicker.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/countdown.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/master.js')}}"></script>
+
+</body>
+</html>

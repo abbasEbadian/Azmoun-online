@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% block title %}
+آزمون {{ exam.name }}  
+{% endblock  %}
+
+
+{% block main %}
+    <div class="exam_main row">
+        <div class="sidebar col-3">
+            <div class="sidebar_items d-flex flex-column justify-content-center h-100">
+                <div class="sidebar_item d-flex flex-column">
+                    <div class="right border-bottom">عنوان آزمون:</div>
+                    <div class="left text-center">{{exam.name}}</div>
+                </div>
+                <div class="sidebar_item d-flex  flex-column">
+                    <div class="right border-bottom">نام درس:</div>
+                    <div class="left text-center">{{exam.course.name}}</div>
+                </div>
+                <div class="sidebar_item d-flex  flex-column">
+                    <div class="right border-bottom">نام استاد:</div>
+                    <div class="left text-center"> دکتر {{exam.course.teacher.name}} </div>
+                </div>
+                <div class="sidebar_item  d-flex  flex-column">
+                    <div class="right border-bottom">تعداد سوالات:</div>
+                    <div class="left text-center">{{ exam.questions | length }} سوال</div>
+                </div>
+                <div class="sidebar_item d-flex  flex-column">
+                    <div class="right border-bottom">مدت آزمون:</div>
+                    <div class="left text-center">{{exam.duration}} دقیقه</div>
+                </div>
+            </div>
+        </div>
+        <div class="content col-9 ms-auto">
+            <header>
+                <div class="question_number">سوال {{question_index}}</div>
+                <div class="time d-flex">
+                    <span>زمان باقیمانده :</span>
+                    <ul id="exam_timer" data-unix="{{exam.unix}}" data-duraion="{{ exam.duration }}">
+                        <li><span class="seconds">00</span></li>
+                        <li class="seperator">:</li>
+                        <li><span class="minutes">00</span></li>
+                        <li class="seperator">:</li>
+                        <li><span class="hours">00</span></li>
+                    </ul>
+                </div>
+            </header>
+            <article class="question_box my-4 p-4 ">
+                <p class="qtext mb-4">{{question_index}}.{{question.text}}</p>
+                <div class="row">
+                    <div class="col-8 options_container">
+                        <div class="form-check my-3">
+                            <input class="form-check-input" type="radio" name="answer" id="answer1" value="1">
+                            <label class="form-check-label" for="answer1">
+                                {{ question.answer_1 }}
+                            </label>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" name="answer" id="answer2" value="2">
+                            <label class="form-check-label" for="answer2">
+                                {{ question.answer_2 }}
+                            </label>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" name="answer" id="answer3" value="3">
+                            <label class="form-check-label" for="answer3">
+                                {{ question.answer_3 }}
+                            </label>
+                        </div>
+                        
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" name="answer" id="answer4" value="4">
+                            <label class="form-check-label" for="answer4">
+                                {{ question.answer_4 }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-4 img_conrainer">
+                        {% if question.image %}
+                        <div class="img" style="background-image: url({{ url_for('static', filename=question.image)}})"></div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <button class="btn btn-main submit_answer" data-qid="{{ question.id }}">ثبت پاسخ</button>
+                </div>
+            </article>
+            <div class="next_prev d-flex justify-content-between  align-items-center w-100 mx-auto my-4">
+                <a href="/exam/{{ exam.id }}/question/{{ question_index - 1 }}" class="btn prev d-flex justify-content-between align-items-center {{question_index == 1 and 'disabled'}}">
+                    <i class="bi-arrow-right-circle-fill text-main me-2 fs-2"></i>
+                    <span class="pb-2 text-dark">سوال قبلی</span>
+                </a>           
+                {% if question_index < (exam.questions | length)  %}
+                    <a href="/exam/{{ exam.id }}/question/{{ question_index + 1 }}" class="next d-flex justify-content-between align-items-center">
+                        <span class="pb-2 text-dark">سوال بعدی</span>
+                        <i class="bi-arrow-left-circle-fill text-main ms-2 fs-2"></i>
+                    </a>
+                {% else %}
+                    <button class="btn btn-success end_exam"> اتمام آزمون</button>
+                {% endif %}
+            </div>
+            <nav aria-label="questions">
+                <ul class="pagination pagination-md justify-content-center">
+                    {% for q in exam.questions %}
+                        <li class="page-item {{ loop.index == question_index and 'active' or ''}}" {% if loop.index == question_index  %}aria-current="page"{% endif %}>
+                            <a class="page-link" href="/exam/{{ exam.id }}/question/{{ loop.index }}">{{ loop.index }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                </nav>
+        </div>
+    </div>
+{% endblock %}

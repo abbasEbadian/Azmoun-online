@@ -1,0 +1,357 @@
+@font-face {
+    font-family: IRANYekan;
+    font-style: normal;
+    font-weight: 300;
+    src: url('../fonts/iranyekanweblight.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+         url('../fonts/iranyekanweblight.ttf') format('truetype');
+}
+*{
+    font-family: IRANYekan;
+}
+a{
+    text-decoration: none;
+}
+body{
+    height: calc(100vh - 61px);
+    padding-top: 52px;
+}
+body.gray_bg{
+    background-color: #e8e8e8; 
+}
+.bg-lightblue{
+    background-color: #e3e7ec ;
+}
+.bg-none{
+    background: none !important;
+    background-color: transparent !important;
+}
+.border-none{
+    border: none !important;
+}
+.border-dashed{
+    border-style: dashed !important;
+}
+.border-muted{
+    border-color: #999 !important;
+}
+.shadow-md{
+    box-shadow : 4px 4px 8px 2px #2222;
+}
+.btn-simple{
+    background: none;
+    border: none;
+}
+.pagination-md .page-link{
+    padding: 0.5rem 1.2rem;
+    font-size: 1.1rem;
+}
+.pointer-none{
+    pointer-events: none;
+}
+.row{
+    margin-left: 0;
+}
+/* Navbar Start */
+
+nav.navbar{
+    padding: 0;
+    border-bottom: 1px solid #ddd;
+    position: fixed;
+    width: 100%;
+    left: 0;
+    top: 0;
+    z-index: 1;
+}
+.sidebar{
+    width: 24%;
+    position: fixed;
+    top: 52px;
+    bottom: 0;
+    right: 0;
+}
+nav.navbar a{
+    display: flex;
+    align-items: center;
+    color: #201F1F !important;
+}
+nav.navbar a.logo{
+    font-weight: 900;
+}
+nav.navbar a.user,
+nav.navbar a.logout{
+    width: 180px;
+    font-size: 14px;
+}
+
+nav.navbar img.logo{
+    width: 42px;
+    height: 42px;
+    margin-left: 16px;
+}
+nav.navbar img.logout{
+    width: 32px;
+    height: 32px;
+    margin-left: 8px;
+}
+
+
+/* Navbar END */
+
+/* SideBar */
+.sidebar a{
+    text-decoration: none;
+}
+
+/* Content */
+.admin_dashboard > .col-4.sidebar{
+    padding-right: 0;
+}
+table tr > th:nth-of-type(1){
+    text-align: center;
+}
+
+.login_from img.logo{
+    height: 62px;
+    width: 62px;
+}
+h3.logo{
+    font-weight: 900;
+}
+
+/* TYPES */
+#types .types_row{
+    display: flex;
+    flex-wrap: wrap;
+}
+#types .type_element{
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 8px 16px;
+    margin-left: 16px;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    margin-bottom: 16px;
+}
+#types .type_element:hover{
+    border-color: #6fa9ff;
+}
+#types .type_element.add{
+    background-color: #6fa9ff;
+    color: white;
+}
+#types .type_element.new, #types div.type_element[data-closable="0"]{
+    padding-left: 35px;
+}
+#types .type_element.new button {
+    border: none;
+    background: none;
+    font-size: 22px;
+    color: green;
+    cursor: pointer;
+    position: absolute;
+    left: 8px;
+    top: 5px;
+    border-right: 1px solid #eee;
+    padding-right: 8px;
+}
+#types .type_element button.close {
+    font-size: 19px;
+    color: crimson;
+    cursor: pointer;
+    position: absolute;
+    left: 2px;
+    top: 5px;
+    padding-right: 8px;
+}
+#types .type_element button i {
+    pointer-events: none;
+}
+#types .type_element.new input{
+    border-width: 0 0 1px 0;
+    max-width: 70px;
+    outline: none;
+    margin-left: 8px;
+}
+#types .type_element.new input:active,
+#types .type_element.new input:focus{
+    outline: none;
+    border-color: #0d6efd;
+}
+
+#types .type_element.new input::placeholder{
+    color: #999;
+}
+
+
+/* Requests */
+#requests .request_line{
+    align-items: center;
+}
+
+#requests .request_line .actions{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: auto;
+}
+#requests .request_line .status{
+
+}
+#requests .request_line .reject{
+    margin: 0 8px;
+}
+#requests .request_line p{
+    margin: 0;
+}
+
+.time-segment input{
+    font-size: 22px;
+    font-weight: 700;
+}
+.iconed-input-group{
+    border-radius: 8px;
+}
+.iconed-input-group input{
+    border-radius: 8px 0 0 8px;
+    border-width: 0 1px 0 0;
+    border-color: #e2e2e2;
+}
+
+.iconed-input-group span.icon{
+    border-radius: 0 8px 8px 0;
+    border: none;
+}
+
+.navigator{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items:  center;
+    margin: 32px 0;
+}
+.navigator .custom-select{
+    width: 200px;
+    height: 42px;
+    background: white;
+    color: #3498ac;
+    border: 1px solid currentColor;
+    z-index: 1;
+    border-radius: 8px;
+}
+.navigator span{
+    position: absolute;
+    width: 100%;
+    top: 5px;
+}
+div.image_preview{
+    height: 250px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 8px;  
+    background-color: #e4e4e4;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    background-position: center;
+    background-size: cover;
+    position: relative;
+}
+div.image_preview .placeholder_image{
+    width: 100px;
+    height: 100px;
+    pointer-events: none;
+}
+div.image_preview .help_text{
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    background: #555d;
+    padding: 4px;
+    border-radius: 4px;
+    color: white;
+    font-size: 12px;
+}
+div.image_preview + input.image_input{
+    display: none;
+}
+.pwt-btn-submit{
+    background: green !important;
+    color: white !important;
+    border-radius: 6px;
+}
+.countdown_counter .clock {
+    display: flex;
+    justify-content: space-between;
+}
+#exams table th:last-of-type,
+#exams table td:last-of-type{
+    width: 150px;
+}
+
+
+
+.exam_main .sidebar {
+    background: #eee;
+    position: fixed;
+    bottom: 0;
+    top: 52px;
+}
+.exam_main .sidebar_item{
+    margin:8px 0 4px ;
+}
+.exam_main .sidebar_item div{
+    padding: 8px;
+}
+.exam_main header{
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+}
+ul#exam_timer {
+    list-style: none;
+    padding: 0;
+    display: block;
+    text-align: center;
+    margin: 0 16px 0 0;
+}
+
+ul#exam_timer li { display: inline-block; }
+
+ul#exam_timer li span {
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 20px;
+}
+
+ul#exam_timer li.seperator {
+    font-size: 20px;
+    line-height: 20px;
+    vertical-align: top;
+}
+
+.question_box{
+    background: #eee;
+    border-radius: 16px;
+}
+.question_box .img {
+    height: 100%;
+	background-position: center;
+	background-size: cover;
+    border-radius: 8px;
+}
+@media (min-width: 900px){
+    .container.login_container, 
+    .container.register_container{
+        width: 50% ;
+    }
+    .next_prev{
+        width: 50% !important;
+    }  
+}

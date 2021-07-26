@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% if not exam %}
+    <h1>آزمون یافت نشد.</h1>
+{% else %}
+    {% block title %}
+    آزمون {{ exam.name }}
+    {% endblock  %}
+    
+    {% block main %}
+        <div class="exam_page w-100 h-100 d-flex justify-content-center align-items-center flex-column" >        
+            <div class="details">
+                <h3>{{ exam.name }}</h3>
+                {% if exam.unix | not_started %}
+                <p>تا شروع: </p>
+                <div class="countdown_counter" data-unix="{{ exam.unix }}">
+                    <a class="d-none enter btn btn-primary" href="/exam/{{exam.id}}/question/1">ورود به آزمون</a>
+                </div>
+                {% elif exam.unix | ongoing(exam.duration) %}
+                <a class="enter btn btn-primary" href="/exam/{{exam.id}}/question/1">ورود به آزمون</a>
+                {% else  %}
+                <h2 class="text-center">زمان آزمون به پایان رسیده است.</h2>
+                {% endif %}
+            </div>
+        </div>
+    {% endblock %}
+{% endif  %}

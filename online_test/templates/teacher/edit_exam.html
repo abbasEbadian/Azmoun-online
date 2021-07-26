@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %} 
+     استاد - حذف و ویرایش آزمون
+{% endblock %}
+
+{% block main %}
+    <main class="admin_dashboard h-100">
+        <div class="row m-0  h-100">
+            {% with active_tab = 'edit_exam' %}
+            {% include '/teacher/teacher_sidebar.html' %}
+            {% endwith %}
+            <div class="col-9 content ms-auto">
+                <article class="" id="edit_exam">
+                        <h4 class="my-4 py-4">ویرایش آزمون</h4>
+                        {% if exams|length %}
+                        <div class="form-group d-flex">
+                            <select class="select_exam_for_edit ">
+                                <option>انتخاب آزمون مورد نظر</option>
+                                {% for exam in exams %} 
+                                    <option value="{{ exam.id }}" {% if  the_exam and exam.id == the_exam.id %} selected="selected" {% endif%}>{{ exam.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <button class="btn btn-main ms-2" id="edit_exam">ویرایش</button>
+                        </div>
+                        {% if the_exam %}
+                            <form id="edit_exam_form"  class="edit_part  my-4" action="/create_new_exam" method="POST" data-exam_id="{{ the_exam.id }}">
+                                {{ exam_form.csrf_token }}
+                                {{ exam_form.date_unix(id="edit_exam_date_unix") }}
+                                {% set f = exam_form.title.process_data(the_exam.name) %}
+                                {% set f = exam_form.course.process_data(the_exam.course.id) %}
+                                {% set f = exam_form.datetime.process_data(the_exam.date.jalalidate) %}
+                                {% set f = exam_form.duration.process_data(the_exam.duration) %}
+                                <div class="exam_form form-group row border rounded-3 p-2">
+                                    <div class="form-group col-12 col-sm-6  mb-4">
+                                        <small class="text-muted mb-2">{{ exam_form.title.label }}:</small>
+                                        {{ exam_form.title(class="form-control" , id="title") }}
+                                    </div>
+                                    <div class="form-group col-12 col-sm-6  mb-4">
+                                        <small class="text-muted mb-2">{{ exam_form.course.label }}:</small>
+                                        {{ exam_form.course(class="form-control", id="course") }}
+                                    </div>
+                                    <div class="form-group col-12 col-sm-6  mb-4">
+                                        <small class="text-muted mb-2">{{ exam_form.datetime.label }}:</small>
+                                        {{ exam_form.datetime(class="form-control", id="datetime") }}
+                                    </div>
+                                    <div class="form-group col-12 col-sm-6  mb-4">
+                                        <small class="text-muted mb-2">{{ exam_form.duration.label }}:</small>
+                                        {{ exam_form.duration(class="form-control", id="duration") }}
+                                    </div>
+                                    <div class="form-group col-12 col-sm-6  mb-2">
+                                        <button type="submit" class="btn btn-primary confirm_exam ">تایید </button>
+                                        <button type="button" class="btn btn-danger delete_exam ">  حذف آزمون </button>
+                                    </div>
+                                </div>
+                            </form>
+                            {% for q in the_exam.questions %}
+                                {{ get_question_template(question_number=loop.index, question_id=q.id, request_type='view') | safe}}
+                            {% endfor %}
+                            <div id="edit_placeholder" class="add_new_question_placeholder  border-muted border-2 border-dashed my-4 row d-flex justify-content-center align-items-center fs-3 text-muted p-4" data-exam_id="{{ the_exam.id}}">
+                                <span class="w-auto">افزودن سوال</span>
+                                <span class="bi-plus-circle w-auto"></span>
+                            </div> 
+                        {% endif %}
+
+                        {% else %}
+                            <div class="alert alert-primary my-4">
+                                تا کنون آزمونی ثبت نکرده اید.
+                            </div>
+                        {% endif %}
+                </article>
+            </div>
+        </div>
+    </main>
+{% endblock %}

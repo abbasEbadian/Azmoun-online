@@ -1,0 +1,27 @@
+{% if current_user.is_authenticated %}
+<nav class="navbar navbar-light bg-main">
+  <div class="container-fluid">
+    {% if current_user.is_authenticated %}
+      <a class="user text-decoration-none" href="/" >
+        <img src="{{url_for('static', filename='img/user.png')}}"  alt="logout" class="d-inline-block align-text-top logout">
+        {% if current_user.is_teacher %}
+        <span class="me-2">دکتر</span>
+        {% endif%}
+        <span>{{ current_user.name }}</span>
+      </a>
+    {% endif %}
+    <a class="navbar-brand flex-grow-1 logo justify-content-center " href="#">
+      <img src="{{url_for('static', filename='img/logo.png')}}" alt="logo" class="d-inline-block align-text-top logo">
+      سـامـانــــــــه آزمـونـــــــــــ آنلایـنـــــــــــــــــــــــــــ
+    </a>
+    {% if current_user.is_authenticated %}
+      <a class="logout text-decoration-none" href="/logout" >
+        <img src="{{url_for('static', filename='img/logout.png')}}"  alt="logout" class="d-inline-block align-text-top logout">
+        <span>خروج از  حساب کاربری</span>
+      </a>
+    {% endif %}
+  </div>
+</nav>
+{% else %}
+
+{% endif %}

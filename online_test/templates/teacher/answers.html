@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %} 
+     استاد - پاسخنامه ها
+{% endblock %}
+
+{% block main %}
+    <main class="admin_dashboard h-100">
+        <div class="row m-0  h-100">
+            {% with active_tab = 'asnwers' %}
+            {% include '/teacher/teacher_sidebar.html' %}
+            {% endwith %}
+            <div class="col-9 content ms-auto">
+                <article class="" id="asnwers">
+                    <h4 class="my-4 py-4">پاسخنامه ها</h4>
+                </article>
+            </div>
+        </div>
+    </main>
+{% endblock %}

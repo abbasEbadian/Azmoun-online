@@ -1,0 +1,47 @@
+<div class="col-3 sidebar  h-100 ps-0">
+    <div class="d-flex flex-column flex-shrink-0 p-3 bg-lightblue  h-100" >
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none" dideo-checked="true">
+          <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+          <span class="fs-4">داشبورد</span>
+        </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item">
+            <a href="/teacher/exams" class="nav-link {{ active_tab == 'exams' and 'active' or 'link-dark' }}" aria-current="page" >
+              <span class="me-3 fs-5 bi bi-file-earmark-text"></span>
+                آزمون ها
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/teacher/new_exam" class="nav-link  {{ active_tab == 'new_exam' and 'active' or 'link-dark' }}" >
+              <span class="me-3 fs-5 bi bi-file-earmark-plus"></span>
+              ایجاد آزمون
+            </a>    
+          </li>
+          <li class="nav-item">
+            <a href="/teacher/edit_exam" class="nav-link   {{ active_tab == 'edit_exam' and 'active' or 'link-dark' }}" >
+              <span class="me-3 fs-5 bi bi-file-earmark-medical"></span>
+              ویرایش و حذف آزمون
+            </a>    
+          </li>
+          <li class="nav-item">
+            <a href="/teacher/answers" class="nav-link   {{ active_tab == 'answers' and 'active' or 'link-dark' }}" >
+                <span class="me-3 fs-5 bi bi-file-earmark-check"></span>
+                پاسخنامه ها
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/teacher/reports" class="nav-link   {{ active_tab == 'reports' and 'active' or 'link-dark' }}" >
+              <span class="me-3 fs-5 bi bi-people"></span>
+              دانشجویان
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/teacher/courses" class="nav-link   {{ active_tab == 'courses' and 'active' or 'link-dark' }}">
+              <span class="me-3 fs-5 bi bi-journals"></span>
+              دروس
+            </a>
+          </li>
+        </ul>
+      </div>
+</div>

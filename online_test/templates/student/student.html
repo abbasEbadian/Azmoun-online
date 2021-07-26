@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% block title %} 
+    داشبورد دانشجو
+{% endblock %}
+
+{% block main %}
+    <main class="student_dashboard h-100">
+        <div class="row m-0  h-100">
+            <div class="col-3 sidebar  h-100 ps-0">
+                <div class="d-flex flex-column flex-shrink-0 p-3 bg-lightblue  h-100" >
+                    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none" dideo-checked="true">
+                      <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                      <span class="fs-4">داشبورد</span>
+                    </a>
+                    <hr>
+                    <ul class="nav nav-pills flex-column mb-auto">
+                      <li class="nav-item">
+                        <a href="#exams" class="nav-link active" aria-current="page" data-target="exams" >
+                          <span class="me-3 fs-5 bi bi-file-earmark-text"></span>
+                            آزمون ها
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="#new_exam" class="nav-link link-dark" data-target="new_exam">
+                          <span class="me-3 fs-5 bi bi-file-earmark-plus"></span>
+                          ایجاد آزمون
+                        </a>    
+                      </li>
+                      <li class="nav-item">
+                        <a href="#edit_exam" class="nav-link link-dark" data-target="edit_exam">
+                          <span class="me-3 fs-5 bi bi-file-earmark-medical"></span>
+                          ویرایش آزمون
+                        </a>    
+                      </li>
+                      <li class="nav-item">
+                        <a href="#answers" class="nav-link link-dark" data-target="answers">
+                            <span class="me-3 fs-5 bi bi-file-earmark-check"></span>
+                            پاسخنامه ها
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="#reports" class="nav-link link-dark" data-target="reports">
+                          <span class="me-3 fs-5 bi bi-people"></span>
+                          دانشجویان
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="#reports" class="nav-link link-dark" data-target="courses">
+                          <span class="me-3 fs-5 bi bi-journals"></span>
+                          انتخاب واحد
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+            </div>
+            <div class="col-9 content ms-auto">
+                <article class ="" id="exams">
+                    <h4 class="my-4 py-4">آزمون های پیش رو:</h4>
+                    
+                    {% if exams|length %}
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">عنوان آزمون</th>
+                                <th scope="col">نام درس </th>
+                                <th scope="col">تاریخ</th>
+                                <th scope="col">مهلت آزمون</th>
+                                <th scope="col">تا شروع:</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for exam in exams %}
+                                    <tr>
+                                        <th scope="row">{{loop.index}}</th>
+                                        <td>{{ exam.name }}</td>
+                                        <td>{{ exam.course.name }}</td>
+                                        <td>{{ exam.jalali_datetime }}</td>
+                                        <td>{{ exam.duration }} دقیقه</td>
+                                        {% if exam.unix | expired %}
+                                            <td class="text-danger">منقضی شده</td>
+                                        {% else %}
+                                            <td class="countdown_counter" data-unix="{{ exam.unix }}"></td>
+                                        {% endif %}
+                                    </tr>  
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <div class="alert alert-primary my-4">
+                            تا کنون آزمونی ثبت نکرده اید.
+                        </div>
+                    {% endif %}
+                </article>
+                <article class ="d-none" id="new_exam">
+                    <h4 class="my-4 py-4">ثبت آزمون جدید</h4>
+                   
+                </article>
+                <article class="d-none" id="edit_exam">
+                    <h4 class="my-4 py-4">ویرایش آزمون</h4>
+                   
+                </article>
+                <article class ="d-none" id="answers">
+                    <h4 class="my-4 py-4">پاسخنامه های دانشجویان</h4>
+                   
+                </article>
+                <article class ="d-none" id="reports">
+                    <h4 class="my-4 py-4">دانشجویان</h4>
+                    <!-- <div class="form-group text-end mb-3">
+                        <button type="button" class="btn btn-main teacher_add_new_course" data-toggle="modal" data-target="#exampleModal" data-whatever="teacher">افزودن درس</button>
+                    </div> -->
+                    {% if not current_user.courses_of_teacher %}
+                        <div class="alert alert-primary" role="alert">
+                            درسی تا به حال انتخاب نشده است.
+                        </div>
+                    {% else %}
+                        <table class="table table-bordered ">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">عنوان درس</th>
+                                <th scope="col">تعداد دانشجویان ثبت نام کرده</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                                {% for course in current_user.courses_of_teacher %}
+                                    <tr>
+                                        <th scope="row">{{ loop.index}}</th>
+                                        <td>{{ course.name }}</td>
+                                        <td>{{ course.enrolled_students.all() | length }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                </article>
+                <article class ="d-none" id="courses">
+                    <h4 class="my-4 py-4">درس های من</h4>
+                    <div class="form-group text-end mb-3">
+                        <button type="button" class="btn btn-main add_new_course" data-toggle="modal" data-target="#exampleModal" data-whatever="teacher">افزودن درس</button>
+                    </div>
+                    <div class="d-flex add_to_lessons mb-4 d-none">
+                        <select name="selected_course" id="select_course">
+                            <option >انتخاب درس</option>
+                            {% for c in courses %}
+                                <option value="{{ c.id }}"> {{ c.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <button class="btn btn-success submit ms-2">ثبت</button>
+                    </div>
+                    {% if not current_user.courses_of_student %}
+                        <div class="alert alert-primary" role="alert">
+                            درسی تا به حال انتخاب نشده است.
+                        </div>
+                    {% else %}
+                        <table class="table table-bordered ">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">عنوان درس</th>
+                                <th scope="col">تعداد واحد </th>
+                                <th scope="col">استاد </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                                {% for course in current_user.courses_of_student %}
+                                    <tr>
+                                        <th scope="row">{{ loop.index}}</th>
+                                        <td>{{ course.name }}</td>
+                                        <td>{{ course.units }}</td>
+                                        <td>{{ course.teacher and course.teacher.name or 'مشخص نشده' }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                    
+                </article>
+            </div>
+        </div>
+    </main>
+{% endblock %}

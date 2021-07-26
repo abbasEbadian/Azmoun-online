@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block title %} 
+    ورود
+{% endblock %}
+
+{% block main %}
+    <div class="container  p-4 mt-4 login_container">
+        <div class="login_from">
+            <form action="" method="POST">
+                <!-- CSRF -->
+                {{ form.hidden_tag() }} 
+                <fieldset class="form-group">
+                    <legend class="mb-4 text-center">
+                        <div class="">
+                            <img src="{{url_for('static', filename='img/logo.png')}}" alt="logo" class="logo"/>
+                            <h3 class="logo mt-2">سامانه آزمونـــ آنلاینــــ</h3>
+                        </div>
+                    </legend>
+                    <div class="form-group  mb-4 ">
+                        {{ form.identifier.label(class="form-control-label pb-2") }}
+                        {%if form.identifier.errors %}
+                            <div class="input-group mb-3 coned-input-group bg-none shadow-md">
+                                <div class="input-group-prepend">
+                                    <span class="icon input-group-text  bi-person-fill h-100 fs-4 text-black-50 bg-white" id="basic-addon1"></span>
+                                </div>
+                                {{ form.identifier(class="form-control form-control-lg is-invalid") }}
+                            </div>
+                            
+                            <div class="invalid-feedback">
+                                {% for error in form.identifier.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {%else%}
+                        <div class="input-group mb-3 iconed-input-group bg-none shadow-md">
+                            <div class="input-group-prepend">
+                                <span class="icon input-group-text bi-person-fill  h-100 fs-4 text-black-50 bg-white" id="basic-addon1"></span>
+                            </div>
+                            {{ form.identifier(class="form-control form-control-lg ") }}
+                        </div>
+                        {%endif%}
+                    </div>
+                    <div class="form-group mb-4">
+                        {{ form.password.label(class="form-control-label pb-2") }}
+                        {%if form.password.errors %}
+                            <div class="input-group mb-3 iconed-input-group bg-none shadow-md">
+                                <div class="input-group-prepend">
+                                    <span class="icon input-group-text bi-shield-lock h-100 fs-4 text-black-50 bg-white" id="basic-addon1"></span>
+                                </div>
+                                {{ form.password(class="form-control form-control-lg  is-invalid") }}
+
+                            </div>
+                            <div class="invalid-feedback ">
+                                {% for error in form.password.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {%else%}
+                        <div class="input-group mb-3 iconed-input-group bg-none shadow-md">
+                            <div class="input-group-prepend">
+                                <span class="icon input-group-text bi-shield-lock  h-100 fs-4 text-black-50 bg-white" id="basic-addon1"></span>
+                            </div>
+                            {{ form.password(class="form-control form-control-lg ") }}
+                        </div>
+                        {%endif%}
+                    </div>
+                    {{ form.submit(class="btn btn-main btn-lg w-100") }}
+                    <div class="form-group mt-4">
+                       
+                    </div>
+                  
+                    <div class="form-group  mb-2 d-flex   justify-content-between align-items-center flex-wrap">
+                        <div class="col-12 col-sm-6  text-sm-end order-sm-2 mb-3">
+                            {{ form.remember() }}
+                            {{ form.remember.label(class="form-control-label") }}
+                        </div>     
+                        <small class="text-muted col-12 col-sm-6  order-sm-1 mb-3">
+                            حساب جدید نیاز دارید؟
+                            <a class="mr-2" href="{{ url_for('register') }}">بسازید !</a>
+                        </small>
+                                           
+                    </div>
+                </fieldset>
+                {% with messages = get_flashed_messages(with_categories=True)%}
+                    {% for category, msg in messages %}
+                        <div class="alert alert-{{category}}" role="alert">
+                            {{ msg }}
+                        </div>
+                    {% endfor %}
+                {% endwith %}
+            </form>
+        </div>
+    </div>
+{% endblock%}

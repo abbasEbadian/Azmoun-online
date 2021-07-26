@@ -1,0 +1,49 @@
+<div class="form-group  my-4  question_form row border py-4 px-2" data-exam_id="{{ exam_id }}" data-q_id="{{ question_id }}">
+    <form class="row save_question_form"  action="/save_question/{{exam_id}}" enctype="multipart/form-data" method="POST" data-question_id="{{ question_id or None}}">
+        {% set f = qform.currect_answer.process_data(question and question.currect_answer or 1) %}
+        {% set f = qform.question_text.process_data(question and question.text or '') %}
+        <p class="question_number"> سوال شماره {{ question_number }}</p>
+        <div class="row col-12 col-sm-6">
+            
+            <div class="form-group col-12  h-100 mb-4">
+                <small class="text-muted pb-2 ">متن سوال</small>
+                {{ qform.question_text(class="form-control") }}
+            </div>
+        </div>
+        <div class="row col-12 col-sm-6 py-4 ps-4">
+                {% if question and question.image  %}
+                    <div class="image_preview" style="background-image: url({{ url_for('static', filename=question.image)}})">
+                        <small class='help_text d-none'>برای تغییر کلیک کنید.</small>
+                    </div>
+                {% else %}
+                    <div class="image_preview" >
+                        <img class="placeholder_image placeholder" src="{{ url_for('static', filename='img/default_img.png')}}" /> 
+                        <small class='placeholder_text placeholder'>افزودن تصویر</small>
+                        <small class='help_text d-none'>برای تغییر کلیک کنید.</small>
+                    </div>
+                {% endif %}
+                {{ qform.image(class="form-control image_input", accept=".png, .jpg") }}
+        </div>
+        <div class="answers row col-12">
+            <div class="form-group col-12 col-sm-6  mb-4 ">
+                {{ qform.answer_1(class="form-control", value=question and question.answer_1 or '') }}
+            </div>
+            <div class="form-group col-12 col-sm-6  mb-4 ">
+                {{ qform.answer_2(class="form-control", value=question and question.answer_2 or '') }}
+            </div>
+            <div class="form-group col-12 col-sm-6  mb-4 ">
+                {{ qform.answer_3(class="form-control", value=question and question.answer_3 or '') }}
+            </div>
+            <div class="form-group col-12 col-sm-6  mb-4 ">
+                {{ qform.answer_4(class="form-control", value=question and question.answer_4 or '') }}
+            </div>
+            <div class="form-group ">
+                <small class="text-muted pb-2 ">گزینه صحیح</small>
+                {{ qform.currect_answer(class="form-control") }}
+                <button type="submit" class="btn btn-success save_question mt-2" >ذخیره سوال</button>
+                <button type="button" class="btn btn-danger delete_question mt-2" >حذف سوال</button>
+            </div>
+        </div>
+    </form>
+</div>  
+

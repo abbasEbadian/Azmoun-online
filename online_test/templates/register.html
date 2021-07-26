@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% block title %} 
+    ثبت نام
+{% endblock %}
+
+{% block main %}
+    <div class="container  p-4 mt-4 register_container">
+        <div class="login_from">
+            <form action="" method="POST">
+                <!-- CSRF -->
+                {{ form.hidden_tag() }} 
+
+                <fieldset class="form-group">
+                    <!-- NAME -->
+                    <legend class="mb-4 text-center">
+                            <div class="">
+                                <img src="{{url_for('static', filename='img/logo.png')}}" alt="logo" class="logo"/>
+                                <h3 class="logo mt-2">سامانه آزمونـــ آنلاینــــ</h3>
+                            </div>
+                        </legend>
+                    <div class="form-group mb-4">
+                            {{ form.name.label(class="form-control-label pb-2") }}
+                            {%if form.name.errors %}
+                                <div class="input-group mb-3 iconed-input-group bg-none shadow-md">
+                                    <div class="input-group-prepend">
+                                        <span class="icon input-group-text bi-person h-100 fs-4 text-black-50 bg-white" id="basic-addon1"></span>
+                                    </div>
+                                    {{ form.name(class="form-control form-control-lg  is-invalid") }}
+    
+                                </div>
+                                <div class="invalid-feedback ">
+                                    {% for error in form.name.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {%else%}
+                            <div class="input-group mb-3 iconed-input-group bg-none shadow-md">
+                                <div class="input-group-prepend">
+                                    <span class="icon input-group-text bi-person  h-100 fs-4 text-black-50 bg-white" id="basic-addon1"></span>
+                                </div>
+                                {{ form.name(class="form-control form-control-lg ") }}
+                            </div>
+                            {%endif%}
+                        </div>
+                    <div class="form-group mb-4">
+                        {{ form.is_teacher() }}
+                        {{ form.is_teacher.label(class="form-control-label") }}
+                    </div>
+                    <!-- IDENTIFIER -->
+                    <div class="form-group  mb-4 ">
+                            {{ form.identifier.label(class="form-control-label pb-2") }}
+                            {%if form.identifier.errors %}
+                                <div class="input-group mb-3 coned-input-group bg-none shadow-md">
+                                    <div class="input-group-prepend">
+                                        <span class="icon input-group-text  bi-credit-card-2-front h-100 fs-4 text-black-50 bg-white" id="basic-addon1"></span>
+                                    </div>
+                                    {{ form.identifier(class="form-control form-control-lg is-invalid") }}
+                                </div>
+                                
+                                <div class="invalid-feedback">
+                                    {% for error in form.identifier.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {%else%}
+                            <div class="input-group mb-3 iconed-input-group bg-none shadow-md">
+                                <div class="input-group-prepend">
+                                    <span class="icon input-group-text bi-credit-card-2-front  h-100 fs-4 text-black-50 bg-white" id="basic-addon1"></span>
+                                </div>
+                                {{ form.identifier(class="form-control form-control-lg ") }}
+                            </div>
+                            {%endif%}
+                        </div>
+                    <!-- PHONE -->
+                    <div class="form-group mb-4">
+                            {{ form.phone.label(class="form-control-label pb-2") }}
+                            {%if form.phone.errors %}
+                                <div class="input-group mb-3 iconed-input-group bg-none shadow-md">
+                                    <div class="input-group-prepend">
+                                        <span class="icon input-group-text bi-phone h-100 fs-4 text-black-50 bg-white" id="basic-addon1"></span>
+                                    </div>
+                                    {{ form.phone(class="form-control form-control-lg  is-invalid") }}
+    
+                                </div>
+                                <div class="invalid-feedback ">
+                                    {% for error in form.phone.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {%else%}
+                            <div class="input-group mb-3 iconed-input-group bg-none shadow-md">
+                                <div class="input-group-prepend">
+                                    <span class="icon input-group-text bi-phone  h-100 fs-4 text-black-50 bg-white" id="basic-addon1"></span>
+                                </div>
+                                {{ form.phone(class="form-control form-control-lg ") }}
+                            </div>
+                            {%endif%}
+                        </div>
+                    <!-- PASSWORD -->
+                    <div class="form-group mb-4">
+                        {{ form.password.label(class="form-control-label pb-2") }}
+                        {%if form.password.errors %}
+                            <div class="input-group mb-3 iconed-input-group bg-none shadow-md">
+                                <div class="input-group-prepend">
+                                    <span class="icon input-group-text bi-shield-lock h-100 fs-4 text-black-50 bg-white" id="basic-addon1"></span>
+                                </div>
+                                {{ form.password(class="form-control form-control-lg  is-invalid") }}
+
+                            </div>
+                            <div class="invalid-feedback ">
+                                {% for error in form.password.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {%else%}
+                        <div class="input-group mb-3 iconed-input-group bg-none shadow-md">
+                            <div class="input-group-prepend">
+                                <span class="icon input-group-text bi-shield-lock  h-100 fs-4 text-black-50 bg-white" id="basic-addon1"></span>
+                            </div>
+                            {{ form.password(class="form-control form-control-lg ") }}
+                        </div>
+                        {%endif%}
+                    </div>
+                    <!-- CONFIRM PASSWORD -->
+                    <div class="form-group mb-4">
+                            {{ form.confirm_password.label(class="form-control-label pb-2") }}
+                            {%if form.confirm_password.errors %}
+                                <div class="input-group mb-3 iconed-input-group bg-none shadow-md">
+                                    <div class="input-group-prepend">
+                                        <span class="icon input-group-text bi-shield-check h-100 fs-4 text-black-50 bg-white" id="basic-addon1"></span>
+                                    </div>
+                                    {{ form.confirm_password(class="form-control form-control-lg  is-invalid") }}
+    
+                                </div>
+                                <div class="invalid-feedback ">
+                                    {% for error in form.confirm_password.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {%else%}
+                            <div class="input-group mb-3 iconed-input-group bg-none shadow-md">
+                                <div class="input-group-prepend">
+                                    <span class="icon input-group-text bi-shield-check  h-100 fs-4 text-black-50 bg-white" id="basic-addon1"></span>
+                                </div>
+                                {{ form.confirm_password(class="form-control form-control-lg ") }}
+                            </div>
+                            {%endif%}
+                        </div>
+                        {{ form.submit(class="btn btn-lg btn-main w-100") }}
+                </fieldset>
+                <div class="form-group text-end mt-2 mb-4 d-flex justify-content-between align-items-center">
+                    <div class="">
+                    <small class="text-muted">
+                        حساب کاربری دارید؟
+                        <a class="mr-2" href="{{ url_for('login') }}">وارد شوید</a>
+                    </small>
+                    </div>
+                    
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock%}

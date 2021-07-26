@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% block title %} 
+    Admin dashboard
+{% endblock %}
+
+{% block main %}
+    <main class="admin_dashboard h-100">
+        <div class="row m-0  h-100">
+            <div class="col-3 sidebar  h-100 ps-0">
+                <div class="d-flex flex-column flex-shrink-0 p-3 bg-lightblue  h-100" >
+                    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none" dideo-checked="true">
+                      <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                      <span class="fs-4">مدیریت</span>
+                    </a>
+                    <hr>
+                    <ul class="nav nav-pills flex-column mb-auto">
+                      <li class="nav-item">
+                        <a href="#teachers" class="nav-link link-dark active" aria-current="page" data-target="teachers" >
+                          <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+                          اساتید
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="#students" class="nav-link link-dark" aria-current="page" data-target="students" >
+                          <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+                          دانشجویان
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#courses" class="nav-link link-dark" data-target="courses">
+                          <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                          دروس
+                        </a>
+                      </li>
+                      
+                    </ul>
+                  </div>
+            </div>
+            <div class="col-9 content">
+                <article class ="" id="teachers">
+                    <h2 class="my-4 py-4">اساتید آموزشگاه</h2>
+                    <div class="form-group text-end mb-3">
+                        <button type="button" class="btn btn-main" data-toggle="modal" data-target="#exampleModal" data-whatever="teacher">افزودن استاد</button>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">نام و نام خانوادگی</th>
+                            <th scope="col">شماره استادی</th>
+                            <th scope="col">تعداد دانشجویان</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for teacher in teachers %}
+                                <tr>
+                                    <th scope="row">{{loop.index}}</th>
+                                    <td>دکتر {{ teacher.name }}</td>
+                                    <td>{{ teacher.identifier }}</td>
+                                    <td>{{ student_counts[teacher.id] }}</td>
+                                </tr>  
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </article>
+                <article class ="d-none" id="students">
+                    <h2 class="my-4 py-4">دانشجویان آموزشگاه</h2>
+                    <div class="form-group text-end mb-3">
+                        <button type="button" class="btn btn-main" data-toggle="modal" data-target="#exampleModal" data-whatever="student">افزودن دانشجو</button>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">نام و نام خانوادگی</th>
+                            <th scope="col">شماره دانشجویی</th>
+                            <th scope="col">واحد های اخذ شده</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for student in students %}
+                                <tr>
+                                    <th scope="row">{{loop.index}}</th>
+                                    <td>{{ student.name }}</td>
+                                    <td>{{ student.identifier  }}</td>
+                                    <td>{{ student_units[student.id] }}</td>
+                                </tr>  
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </article>
+                <article class ="d-none" id="courses">
+                        <h2 class="my-4 py-4">دروس</h2>
+                        <div class="form-group text-end mb-3">
+                            <button type="button" class="btn btn-main" data-toggle="modal" data-target="#exampleModal" data-whatever="course">افزودن درس</button>
+                        </div>
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">عنوان درس</th>
+                                <th scope="col">تعداد واحد</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for course in courses %}
+                                    <tr>
+                                        <th scope="row">{{loop.index}}</th>
+                                        <td>{{ course.name }}</td>
+                                        <td>{{ course.units  }}</td>
+                                    </tr>  
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                </article>
+            </div>
+        </div>
+    </main>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+        <button type="button" class="btn close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="fs-2">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Recipient:</label>
+            <input type="text" class="form-control" name="name" id="name">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Message:</label>
+            <input type="text" class="form-control" name="code" id="code">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary close" data-dismiss="modal">لغو</button>
+        <input type="hidden" name="url" value="" />
+        <button type="button" class="btn btn-primary create">ایجاد</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

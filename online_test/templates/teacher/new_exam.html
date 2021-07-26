@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %} 
+     استاد - آزمون جدید
+{% endblock %}
+
+{% block main %}
+    <main class="admin_dashboard h-100">
+        <div class="row m-0  h-100">
+            {% with active_tab = 'new_exam' %}
+            {% include '/teacher/teacher_sidebar.html' %}
+            {% endwith %}
+            <div class="col-9 content ms-auto">
+                <article class ="" id="new_exam">
+                    <h4 class="my-4 py-4">ثبت آزمون جدید</h4>
+                    <form id="create_new_exam" action="/create_new_exam" method="POST">
+                        {{ exam_form.csrf_token }}
+                        {{ exam_form.date_unix(id="create_exam_date_unix") }}
+                        <div class="exam_form form-group row border rounded-3 p-2">
+                            <div class="form-group col-12 col-sm-6  mb-4">
+                                <small class="text-muted mb-2">{{ exam_form.title.label }}:</small>
+                                {{ exam_form.title(class="form-control" , id="title") }}
+                            </div>
+                            <div class="form-group col-12 col-sm-6  mb-4">
+                                <small class="text-muted mb-2">{{ exam_form.course.label }}:</small>
+                                {{ exam_form.course(class="form-control", id="course") }}
+                            </div>
+                            <div class="form-group col-12 col-sm-6  mb-4">
+                                <small class="text-muted mb-2">{{ exam_form.datetime.label }}:</small>
+                                {{ exam_form.datetime(class="form-control", id="datetime") }}
+                            </div>
+                            <div class="form-group col-12 col-sm-6  mb-4">
+                                <small class="text-muted mb-2">{{ exam_form.duration.label }}:</small>
+                                {{ exam_form.duration(class="form-control", id="duration") }}
+                            </div>
+                            <div class="form-group col-12 col-sm-6  mb-2">
+                                <button type="submit" class="btn btn-primary confirm_exam ">تایید  و ادامه</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="add_new_question_placeholder d-none border-muted border-2 border-dashed my-4 row d-flex justify-content-center align-items-center fs-3 text-muted p-4">
+                        <span class="w-auto">افزودن سوال</span>
+                        <span class="bi-plus-circle w-auto"></span>
+                    </div> 
+                </article>
+            </div>
+        </div>
+    </main>
+{% endblock %}

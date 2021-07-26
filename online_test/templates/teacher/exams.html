@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %} 
+     استاد - آزمون ها
+{% endblock %}
+
+{% block main %}
+    <main class="admin_dashboard h-100">
+        <div class="row m-0  h-100">
+            {% with active_tab = 'exams' %}
+            {% include '/teacher/teacher_sidebar.html' %}
+            {% endwith %}
+            <div class="col-9 content ms-auto">
+      
+                <article class ="" id="exams">
+                    <h4 class="my-4 py-4">آزمون ها ثبت شده:</h4>
+                    
+                    {% if exams|length %}
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">عنوان آزمون</th>
+                                <th scope="col">نام درس </th>
+                                <th scope="col">تاریخ</th>
+                                <th scope="col">مهلت آزمون</th>
+                                <th scope="col">تعداد سوالات</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for exam in exams %}
+                                    <tr>
+                                        <th scope="row">{{loop.index}}</th>
+                                        <td>{{ exam.name }}</td>
+                                        <td>{{ exam.course.name }}</td>
+                                        <td>{{ exam.jalali_datetime }}</td>
+                                        <td>{{ exam.duration }} دقیقه</td>
+                                        <td>{{ exam.questions | length }}</td>
+                                    </tr>  
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <div class="alert alert-primary my-4">
+                            تا کنون آزمونی ثبت نکرده اید.
+                        </div>
+                    {% endif %}
+                </article>
+            </div>
+        </div>
+    </main>
+{% endblock %}

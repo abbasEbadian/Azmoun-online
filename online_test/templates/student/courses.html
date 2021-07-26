@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %} 
+     دانشجو - دروس
+{% endblock %}
+
+{% block main %}
+    <main class="admin_dashboard h-100">
+        <div class="row m-0  h-100">
+            {% with active_tab = 'courses' %}
+            {% include '/student/student_sidebar.html' %}
+            {% endwith %}
+            <div class="col-9 content ms-auto">
+                <article class ="" id="courses">
+                    <h4 class="my-4 py-4">درس های من</h4>
+                    <div class="form-group text-end mb-3">
+                        <button type="button" class="btn btn-main add_new_course" data-toggle="modal" data-target="#exampleModal" data-whatever="teacher">افزودن درس</button>
+                    </div>
+                    <div class="d-flex add_to_lessons mb-4 d-none">
+                        <select name="selected_course" id="select_course">
+                            <option >انتخاب درس</option>
+                            {% for c in courses %}
+                                <option value="{{ c.id }}"> {{ c.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <button class="btn btn-success submit ms-2">ثبت</button>
+                    </div>
+                    {% if not current_user.courses_of_student %}
+                        <div class="alert alert-primary" role="alert">
+                            درسی تا به حال انتخاب نشده است.
+                        </div>
+                    {% else %}
+                        <table class="table table-bordered ">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">عنوان درس</th>
+                                <th scope="col">تعداد واحد </th>
+                                <th scope="col">استاد </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                                {% for course in current_user.courses_of_student %}
+                                    <tr>
+                                        <th scope="row">{{ loop.index}}</th>
+                                        <td>{{ course.name }}</td>
+                                        <td>{{ course.units }}</td>
+                                        <td>{{ course.teacher and course.teacher.name or 'مشخص نشده' }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                    
+                </article>
+            </div>
+        </div>
+    </main>
+{% endblock %}
