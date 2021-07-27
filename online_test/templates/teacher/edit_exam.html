@@ -28,7 +28,7 @@
                                 {{ exam_form.date_unix(id="edit_exam_date_unix") }}
                                 {% set f = exam_form.title.process_data(the_exam.name) %}
                                 {% set f = exam_form.course.process_data(the_exam.course.id) %}
-                                {% set f = exam_form.datetime.process_data(the_exam.date.jalalidate) %}
+                                {% set f = exam_form.datetime.process_data(the_exam.jalali_datetime) %}
                                 {% set f = exam_form.duration.process_data(the_exam.duration) %}
                                 <div class="exam_form form-group row border rounded-3 p-2">
                                     <div class="form-group col-12 col-sm-6  mb-4">
