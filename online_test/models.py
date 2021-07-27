@@ -85,7 +85,7 @@ class Exam(db.Model):
             "date": self.date.timestamp(), 
             "create_date": jdatetime.datetime.fromgregorian(datetime=self.create_date).strftime(DATETIME_FORMAT)
         }
-
+    
     @property
     def unix(self):
         return int(self.date.timestamp())
@@ -98,6 +98,10 @@ class Exam(db.Model):
         secs = (datetime.fromtimestamp(int(self.unix)) - datetime.now()).total_seconds()
         return  secs < 0 and secs + (self.duration * 60) > 0  
     
+    def get_score(self, user):
+        ans = list(filter(lambda x: x.student == user, self.answers))
+        score = sum([x.is_currect for x in ans]) / (len(ans) or 1)
+        return 12 * score
 
 class Question(db.Model):
     id = db.Column(db.Integer, primary_key=True)
