@@ -33,7 +33,11 @@
                                         <td>{{ exam.course.name }}</td>
                                         <td>{{ exam.jalali_datetime }}</td>
                                         <td>{{ exam.duration }} دقیقه</td>
-                                        {% if exam.unix | not_started %}
+                                        {% if exam in current_user.completed_exams %}
+                                            <td>
+                                                {{ exam.get_score(current_user) }}
+                                            </td>
+                                        {% elif exam.unix | not_started %}
                                             <td class="countdown_counter" data-unix="{{ exam.unix }}">
                                                 <a class="btn btn-primary py-1 d-none enter" href="/exam/{{exam.id}}">ورود به آزمون</a>
                                             </td>
