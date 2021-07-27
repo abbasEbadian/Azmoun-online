@@ -1,6 +1,6 @@
 from wtforms.form import FormMeta
 from online_test import app
-from flask import render_template, request, flash, redirect, url_for, jsonify
+from flask import render_template, request, flash, redirect, url_for, jsonify, g
 import json, os
 from online_test.models import User, Course, Exam, Question, Answer
 from online_test.forms import RegisterForm, LoginForm, QuestionForm, ExamForm
@@ -281,13 +281,14 @@ def save_question(exam_id, question_id=-1):
     ]
     data = {
         "text" : request.form.get("question_text"),
-        "answer_1" : request.form.get("answer_1"),
-        "answer_2" : request.form.get("answer_2"),
-        "answer_3" : request.form.get("answer_3"),
-        "answer_4" : request.form.get("answer_4"),
+        "answer_1" : request.form.get("answer_1").strip(),
+        "answer_2" : request.form.get("answer_2").strip(),
+        "answer_3" : request.form.get("answer_3").strip(),
+        "answer_4" : request.form.get("answer_4").strip(),
         "currect_answer" : int(request.form.get("currect_answer")),
     }
-    
+    if len(set([data["answer_1"], data["answer_2"], data["answer_3"], data["answer_4"]])) != 4:
+        return jsonify({"result": "fail", "cause": "گزینه ها نمی توانند تکراری باشند"})
     q = Question.query.filter_by(id=question_id)
     if q.all():
         q.update({k: v for k,v in zip(update_kw, data.values())})
@@ -297,7 +298,6 @@ def save_question(exam_id, question_id=-1):
         db.session.add(q)
     q.exam = exam
     image = request.files['image']
-    print("F: ",image.filename, q)
     if image.filename and q:
         image.filename = str(q.id) + "_" + image.filename
         for ext in ['.png', '.jpg']:
@@ -345,20 +345,32 @@ def delete_exam(exam_id):
 @login_required
 def exam(exam_id):
     exam = Exam.query.get(int(exam_id))      
-    if exam and exam not in current_user.courses_of_student:
+    if exam and exam.course not in current_user.courses_of_student:
         return redirect(url_for('student'))  
     if exam and exam in current_user.completed_exams:
         return redirect(url_for('exam_result', exam_id=exam_id))
     if exam and exam.is_ongoing():
-        return redirect(url_for('exam_q', exam_id=exam.id, question_index=1, source="main"))
-    
+        get_source()
+        return redirect(url_for('exam_q', exam_id=exam.id, question_index=1))
     return render_template('exam.html', exam=exam)
-    
+
+@app.teardown_appcontext
+def teardown_source(exception):
+   return g.pop('source', None)
+
+
+def get_source():
+    if 'source' not in g:
+        g.source = 'main'
+    return g.source
+
+
 @app.route("/exam/<exam_id>/question/<question_index>")
 @login_required
-def exam_q(exam_id, question_index, source=""):
-    if source != "main":
+def exam_q(exam_id, question_index):
+    if not get_source():
         return redirect(url_for('exam', exam_id=exam_id))
+
     question_index = int(question_index)
     exam = Exam.query.get(int(exam_id))
     question = None
