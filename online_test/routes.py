@@ -396,7 +396,7 @@ def submit_answer(question_id, answer):
     question = Question.query.get(int(question_id))
     exam = question.exam
     if exam in current_user.completed_exams:
-        return redirect(url_for('exam_result', exam_id=exam.id))
+        return jsonify({"result": "fail", "redirect": f"/exam_result/{exam.id}"})
     ans = Answer.query.filter(Answer.student==current_user, Answer.exam==exam, Answer.question==question).first()
     if not ans:
         ans = Answer(student=current_user, exam=exam, question=question, value=int(answer))
@@ -423,7 +423,7 @@ def exam_result(exam_id):
         return redirect(url_for('exam', exam_id=exam_id))
     ans = list(filter(lambda x: x.exam.id == int(exam_id) , current_user.answers))
     currect = sum([a.is_currect for a in ans])
-    total = len(ans)
+    total = len(exam.questions)
     point = 12 / (total or 1) * currect 
 
     return render_template("exam_result.html", point=point, exam=exam, currect=currect, total=total)
