@@ -13,7 +13,6 @@ app.config["UPLOADS_DEFAULT_URL"] = app.config["APP_NAME"] + '/static'
 
 app.config["UPLOADED_PROFILEPICS_DEST"] = app.config["UPLOADS_DEFAULT_DEST"] + '/uploads/profile_pics'
 app.config["UPLOADED_QUESTIONPICS_DEST"] = app.config["UPLOADS_DEFAULT_DEST"]+'/uploads/question_pics'
-print(app.config["UPLOADED_QUESTIONPICS_DEST"])
 app.config["UPLOADS_DEFAULT_URL"] = 'uploads/images'
 profile_pics = UploadSet('profilepics', IMAGES)
 question_pics = UploadSet('questionpics', IMAGES)

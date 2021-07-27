@@ -361,14 +361,9 @@ def exam_q(exam_id, question_index, source=""):
         return redirect(url_for('exam', exam_id=exam_id))
     question_index = int(question_index)
     exam = Exam.query.get(int(exam_id))
-    if not exam or not exam.is_ongoing():
-        return redirect(url_for('exam', exam_id=exam_id))
-    if exam in current_user.completed_exams:
-        return redirect(url_for('exam_result', exam_id=exam_id))
     question = None
     def red(q):
         return redirect(url_for('exam_q', exam_id=exam_id, question_index=q))
-    print(question_index)
     if question_index < 1 :
         return red(1)
     elif question_index > len(exam.questions):

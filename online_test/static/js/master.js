@@ -355,7 +355,7 @@ $(function(ready){
     });
     if (window.location.href.indexOf('exam') > -1){
         function disableBack() { window.history.forward(); }
-        setTimeout("disableBack()", 0);
+        setTimeout(disableBack, 0);
         window.onunload = function () { null };
     }
 });
@@ -433,7 +433,10 @@ function save_question(e) {
         body: formdata
     }).then((response)=>{
         response.json().then((data)=>{
-            toastr.success("با موفقیت ثبت شد");
+            if (data.result == "success")
+                toastr.success("با موفقیت ثبت شد");
+            else
+                toastr.error(data.cause);
         });
     });
 }
