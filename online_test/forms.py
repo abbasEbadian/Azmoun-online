@@ -58,7 +58,7 @@ class ExamForm(FlaskForm):
     course = QuerySelectField('درس مربوطه', query_factory=get_courses,
                                 get_pk=lambda a: a.id,
                                 get_label=lambda a: a.name)
-    datetime = DateTimeField("تاریخ برگزاری", render_kw={"autocomplete": "off"})
+    datetime = StringField("تاریخ برگزاری", render_kw={"autocomplete": "off"})
     duration = IntegerField("مهلت آزمون ( دقیقه )", render_kw={"autocomplete": "off"})
     date_unix = HiddenField("", id="date_unix",validators=[DataRequired(message='تاریخ پایان نمیتواند خالی باشد.')])
 
