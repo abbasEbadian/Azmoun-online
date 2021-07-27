@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %} 
+     دانشجو - نمرات
+{% endblock %}
+
+{% block main %}
+    <main class="admin_dashboard h-100">
+        <div class="row m-0  h-100">
+            {% with active_tab = 'answers' %}
+            {% include '/student/student_sidebar.html' %}
+            {% endwith %}
+            <div class="col-9 content ms-auto">
+                <article class ="" id="exams">
+                    <h4 class="my-4 py-4">آزمون های پیش رو:</h4>
+                    
+                    {% if exams|length %}
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">عنوان آزمون</th>
+                                <th scope="col">نام درس </th>
+                                <th scope="col">تاریخ</th>
+                                <th scope="col">مهلت آزمون</th>
+                                <th scope="col">تا شروع:</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for exam in exams|sort(reverse=True, attribute=("date"))%}
+                                    <tr>
+                                        <th scope="row">{{loop.index}}</th>
+                                        <td>{{ exam.name }}</td>
+                                        <td>{{ exam.course.name }}</td>
+                                        <td>{{ exam.jalali_datetime }}</td>
+                                        <td>{{ exam.duration }} دقیقه</td>
+                                        {% if exam in current_user.completed_exams %}
+                                            <td>
+                                                {{ exam.get_score(current_user) }}
+                                            </td>
+                                        {% elif exam.unix | not_started %}
+                                            <td class="countdown_counter" data-unix="{{ exam.unix }}">
+                                                <a class="btn btn-primary py-1 d-none enter" href="/exam/{{exam.id}}">ورود به آزمون</a>
+                                            </td>
+                                            
+                                        {% elif exam.unix | ongoing(exam.duration) %}
+                                            <td ><a class="btn btn-primary py-1" href="/exam/{{exam.id}}">ورود به آزمون</a></td>
+                                        {% else %}
+                                            <td class="text-danger">منقضی شده</td>
+                                        {% endif %}
+                                    </tr>  
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <div class="alert alert-primary my-4">
+                            تا کنون آزمونی ثبت نکرده اید.
+                        </div>
+                    {% endif %}
+                </article>
+            </div>
+        </div>
+    </main>
+{% endblock %}
