@@ -7,37 +7,19 @@
         <hr>
         <ul class="nav nav-pills flex-column mb-auto">
           <li class="nav-item">
-            <a href="/student/exams" class="nav-link active" aria-current="page" >
+            <a href="/student/exams" class="nav-link  {{ active_tab == 'exams' and 'active' or 'link-dark' }}" aria-current="page" >
               <span class="me-3 fs-5 bi bi-file-earmark-text"></span>
                 آزمون ها
             </a>
           </li>
           <li class="nav-item">
-            <a href="/student/" class="nav-link link-dark" >
-              <span class="me-3 fs-5 bi bi-file-earmark-plus"></span>
-              ایجاد آزمون
-            </a>    
-          </li>
-          <li class="nav-item">
-            <a href="/student/" class="nav-link link-dark" >
-              <span class="me-3 fs-5 bi bi-file-earmark-medical"></span>
-              ویرایش آزمون
-            </a>    
-          </li>
-          <li class="nav-item">
-            <a href="/student/" class="nav-link link-dark" >
+            <a href="/student/answers" class="nav-link {{ active_tab == 'answers' and 'active' or 'link-dark' }}" >
                 <span class="me-3 fs-5 bi bi-file-earmark-check"></span>
-                پاسخنامه ها
+               نمرات
             </a>
           </li>
           <li class="nav-item">
-            <a href="/student/" class="nav-link link-dark" >
-              <span class="me-3 fs-5 bi bi-people"></span>
-              دانشجویان
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="/student/courses" class="nav-link link-dark" >
+            <a href="/student/courses" class="nav-link  {{ active_tab == 'courses' and 'active' or 'link-dark' }}" >
               <span class="me-3 fs-5 bi bi-journals"></span>
               انتخاب واحد
             </a>
