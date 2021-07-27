@@ -114,7 +114,7 @@ $(function(ready){
         });
     }); 
     let edit_from = $("#edit_exam .exam_form input#datetime").persianDatepicker({
-        format:"L HH:mm dddd",
+        format:"L HH:mm",
         initialValue:false,
         autoClose:false,
         toolbox: false,
@@ -148,7 +148,7 @@ $(function(ready){
         },
     });
     let new_from = $("#new_exam .exam_form input#datetime").persianDatepicker({
-        format:"L HH:mm dddd",
+        format:"L HH:mm",
         initialValue:false,
         autoClose:false,
         toolbox: false,
@@ -241,7 +241,7 @@ $(function(ready){
                 form.removeClass("d-none");
                 form.find("#title").val(course_name);
                 form.find(`#course option[value=${course_id}]`).prop("selected", true);
-                form.find("#datetime").val(new persianDate(date*1000).format("L HH:mm dddd"));
+                form.find("#datetime").val(new persianDate(date*1000).format("L HH:mm ddd"));
                 form.find("#duration").val(duration);
                 $("#edit_exam .question_form").detach();
                 $(question_ids).each((i, question_id)=>{
@@ -331,9 +331,11 @@ $(function(ready){
             if (result.result == 'success'){
                 $('.text-success').removeClass('d-none');
                 $('li.current').addClass('active');
+                toastr[result.result](result.msg);
+            }else{
+                document.location.href = result.redirect;
             }
 
-            toastr[result.result](result.msg);
         });
     });
     $(".end_exam").off().click(e=>{
