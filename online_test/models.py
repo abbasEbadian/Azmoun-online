@@ -72,7 +72,14 @@ class Exam(db.Model):
 
     @property
     def jalali_datetime(self):
-        return jdatetime.datetime.fromgregorian(datetime=self.date).strftime(DATETIME_FORMAT)
+        d = jdatetime.datetime.fromgregorian(datetime=self.date)
+        d = d.strftime(DATETIME_FORMAT)
+        return d
+
+    @property
+    def jalali_datetime_o(self):
+        d = jdatetime.datetime.fromgregorian(datetime=self.date)
+        return d
     
     @property
     def serialize(self):
