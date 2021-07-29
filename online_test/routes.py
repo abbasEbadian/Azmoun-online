@@ -53,7 +53,7 @@ def teacher(menu_name=None, param1=None):
     
     data = {
         "body_class" : "login_page",
-        "courses": Course.query.filter(Course.id not in [x.id for x in current_user.courses_of_teacher]).all(),
+        "courses": Course.query.filter_by(teacher=None),
         "exam_form": ExamForm(),
         "param1": param1
     }
@@ -225,10 +225,18 @@ def new_course():
 @app.route('/add_course_to_user/<course_id>', methods=["POST", "GET"])
 def add_course_to_user(course_id):
     course = Course.query.get(int(course_id))
+    if course in current_user.courses_of_student:
+        return jsonify({"result": "fail", "cause": "این درس قبلا انتخاب شده است."})
+
     if current_user.is_teacher:
         current_user.courses_of_teacher.append(course)
     elif current_user.is_student:
+        units_count = current_user.units_count()
+        if course.units + units_count > 18:
+            return jsonify({"result": "fail", "cause": "تعداد واحد ها نمی تواند بیشتر از 18 باشد."})
+       
         current_user.courses_of_student.append(course)
+
     db.session.commit()
     return jsonify({"result": "success"})
 
@@ -410,8 +418,9 @@ def submit_answer(question_id, answer):
 @login_required
 def complete_exam(exam_id):
     exam = Exam.query.get(int(exam_id))
-    current_user.completed_exams.append(exam)
-    db.session.commit()
+    if exam not in current_user.completed_exams:
+        # current_user.completed_exams.append(exam)
+        db.session.commit()
     return jsonify({"result": "success"})
 
 

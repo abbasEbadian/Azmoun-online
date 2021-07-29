@@ -21,14 +21,14 @@
 		}, options);
 
 		// Throw error if date is not set
-		if (!settings.date) {
-			$.error('Date is not defined.');
-		}
+		// if (!settings.date) {
+		// 	$.error('Date is not defined.');
+		// }
 
 		// Throw error if date is set incorectly
-		if (!Date.parse(settings.date)) {
-			$.error('Incorrect date format, it should look like this, 12/24/2012 12:00:00.');
-		}
+		// if (!Date.parse(settings.date)) {
+		// 	$.error('Incorrect date format, it should look like this, 12/24/2012 12:00:00.');
+		// }
 
 		// Save container
 		var container = this;
@@ -54,12 +54,12 @@
 		 * Main countdown function that calculates everything
 		 */
 		function countdown() {
-			var target_date = new Date(settings.date), // set target date
-				current_date = currentDate(); // get fixed current date
+			// var target_date = new Date(settings.date), // set target date
+			// 	current_date = currentDate(); // get fixed current date
 
 			// difference of dates
-			var difference = target_date - current_date;
-
+			// var difference = target_date - current_date;
+			var difference = settings.diff
 			// if difference is negative than it's pass the target date
 			if (difference < 0) {
 				// stop timer
@@ -89,10 +89,10 @@
 				seconds = Math.floor((difference % _minute) / _second);
 
 			// based on the date change the refrence wording
-			var text_days = (days === 1) ? settings.day : settings.days,
-				text_hours = (hours === 1) ? settings.hour : settings.hours,
-				text_minutes = (minutes === 1) ? settings.minute : settings.minutes,
-				text_seconds = (seconds === 1) ? settings.second : settings.seconds;
+			// var text_days = (days === 1) ? settings.day : settings.days,
+			// 	text_hours = (hours === 1) ? settings.hour : settings.hours,
+			// 	text_minutes = (minutes === 1) ? settings.minute : settings.minutes,
+			// 	text_seconds = (seconds === 1) ? settings.second : settings.seconds;
 
 				// fix dates so that it will show two digets
 				days = (String(days).length >= 2) ? days : '0' + days;

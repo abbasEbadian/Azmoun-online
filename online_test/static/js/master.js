@@ -25,8 +25,19 @@ $(function(ready){
         const text = $('input[name="is_teacher"]').prop('checked')? "شماره استادی" : "شماره دانشجویی";        
         $("label[for='identifier']").text(text);
     });
-    console.log("test");
+    $("table").parent().css({"overflow-x":"auto", "position": "relative", "z-index":"0"});
     
+    $(".sidebar a").off().click(e=>{        
+        const that = $(e.target);
+        $(that).parent().siblings('li').find('a').removeClass('active');
+        $(that).addClass('active');
+        $("article").addClass("d-none");
+        const target = $(that).data("target");
+        $("#"+target).removeClass('d-none');
+    });
+    if (document.location.hash){
+        $(`.sidebar a[data-target=${document.location.hash.slice(1)}]`).click();
+    }
 
     if (document.location.href.indexOf("edit_exam")){
         append_question_to_page($("<i class='d-none'>"), $("body"));
@@ -106,17 +117,21 @@ $(function(ready){
         }
         fetch(`/add_course_to_user/${selected}`).then((response)=>{
             response.json().then((data)=>{
-                toastr.success("با موفقیت ثبت شد");
-                setTimeout(() => {
-                    document.location.reload();
-                }, 1000);
+                if (data.result == 'success'){
+                    toastr.success("با موفقیت ثبت شد");
+                    setTimeout(() => {
+                        document.location.reload();
+                    }, 1000);
+                }else{
+                    toastr.error(data.cause);
+                }
             });
         });
     }); 
     let edit_from = $("#edit_exam .exam_form input#datetime").persianDatepicker({
         format:"L HH:mm",
-        initialValue:false,
-        autoClose:false,
+        initialValue: ($("input#datetime").attr("unix") && +$("input#datetime").attr("unix")*1000) || false ,
+        autoClose: false,
         toolbox: false,
         toolbox:{
             submitButton: {
@@ -231,31 +246,6 @@ $(function(ready){
         const exam_id = $("select.select_exam_for_edit :selected").val();
         document.location.href = '/teacher/edit_exam/'+exam_id; 
         return;
-        $("#edit_exam_form").data("id", exam_id);
-        if (!exam_id) return;
-        fetch(`/get_exam/${exam_id}`).then((response)=>{
-            response.json().then((data)=>{
-                const {course_id, course_name, create_date, date, duration, id, question_ids} = {...data.exam};
-                const form = $("#edit_exam_form");
-                form.data("exam_id", id);
-                form.removeClass("d-none");
-                form.find("#title").val(course_name);
-                form.find(`#course option[value=${course_id}]`).prop("selected", true);
-                form.find("#datetime").val(new persianDate(date*1000).format("L HH:mm ddd"));
-                form.find("#duration").val(duration);
-                $("#edit_exam .question_form").detach();
-                $(question_ids).each((i, question_id)=>{
-                    const question_number = 1+ i ; 
-                    fetch(`/get_question_template/${question_number}/${exam_id}/${question_id}`).then((response)=>{
-                        response.json().then((data)=>{
-                            append_question_to_page(data.body, $("article#edit_exam .add_new_question_placeholder"));
-                        });
-                    });
-                });
-                $("#save_question_form").off().submit(save_question);
-                
-            });
-        });
     });
    
     $("#edit_placeholder").off().click((e)=>{
@@ -293,11 +283,10 @@ $(function(ready){
     if ( $("#exam_timer").length ){
         const timer = $("#exam_timer");
         const duration = +timer.data('duration') || 1;
-        const start = new Date(+timer.data("unix")*1000 +  duration*60*1000);
-        start.setSeconds(0);
+        
+        const diff =  new Date(+timer.data("unix")*1000 +  duration*60*1000) - new Date();
         timer.countdown({
-            date : start.toLocaleString(),
-            offset: +3.5
+            diff: diff
         },()=>{
             fetch("/complete_exam/"+$("input#exam_id").val())
             .then(r=>r.json())
@@ -342,7 +331,7 @@ $(function(ready){
         $("#end_exam_modal").modal("show");
     });
     $("#end_exam_modal").on('shown.bs.modal', function(){
-        $(this).find("button").off().click(e=>{
+        $(this).find("button.btn-primary").off().click(e=>{
             fetch("/complete_exam/"+$("input#exam_id").val())
             .then(r=>r.json())
             .then(data=>{
@@ -355,11 +344,10 @@ $(function(ready){
             });
         });
     });
-    if (window.location.href.indexOf('exam') > -1){
-        function disableBack() { window.history.forward(); }
-        setTimeout(disableBack, 0);
-        window.onunload = function () { null };
-    }
+    $("body").click((e)=>{
+        if ($(e.target).parents('.sidebar').length == 0 && $(".sidebar.open").length >0)
+            $('.toggle_sidebar').click();
+    });
 });
 function changeBackground(img){
     let preview_div = $(img).siblings("div.image_preview");
@@ -422,7 +410,12 @@ function getTimeRemaining(endtime) {
         const timeinterval = setInterval(updateClock, 1000);
         
     }
-  
+
+function toggle_sidebar(e) {
+    e.stopPropagation();
+    $(".sidebar").toggleClass("open");
+    $(e.target).toggleClass("bi-x")
+}
 function save_question(e) {
     e.preventDefault();
     const form = $(e.target);

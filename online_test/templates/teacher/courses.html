@@ -9,7 +9,7 @@
             {% with active_tab = 'courses' %}
             {% include '/teacher/teacher_sidebar.html' %}
             {% endwith %}
-            <div class="col-9 content ms-auto">
+            <div class="col-12 col-md-9 content ms-auto">
             <article class ="" id="courses">
                     <h4 class="my-4 py-4">درس های من</h4>
                     <div class="form-group text-end mb-3">
@@ -19,7 +19,9 @@
                         <select name="selected_course" id="select_course">
                             <option >درس مورد نظر </option>
                             {% for c in courses %}
+                                {% if c not in current_user.courses_of_teacher %}
                                 <option value="{{ c.id }}"> {{ c.name }}</option>
+                                {% endif %}
                             {% endfor %}
                         </select>
                         <button class="btn btn-success submit ms-2">ثبت</button>
@@ -29,25 +31,27 @@
                             درسی تا به حال انتخاب نشده است.
                         </div>
                     {% else %}
-                        <table class="table table-bordered ">
-                            <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">عنوان درس</th>
-                                <th scope="col">تعداد واحد </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                                {% for course in current_user.courses_of_teacher %}
+                        <div>
+                            <table class="table table-bordered ">
+                                    <thead>
                                     <tr>
-                                        <th scope="row">{{ loop.index}}</th>
-                                        <td>{{ course.name }}</td>
-                                        <td>{{ course. units }}</td>
+                                        <th scope="col">#</th>
+                                        <th scope="col">عنوان درس</th>
+                                        <th scope="col">تعداد واحد </th>
                                     </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                                    </thead>
+                                    <tbody>
+        
+                                        {% for course in current_user.courses_of_teacher %}
+                                            <tr>
+                                                <th scope="row">{{ loop.index}}</th>
+                                                <td>{{ course.name }}</td>
+                                                <td>{{ course. units }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                        </div>
                     {% endif %}
                     
                 </article>

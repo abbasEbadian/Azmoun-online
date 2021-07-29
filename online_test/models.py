@@ -44,6 +44,9 @@ class User(db.Model, UserMixin):
     def is_admin(self):
         return self.user_type == 'admin' or self.id == 1
 
+    def units_count(self):
+        return sum([x.units for x in self.courses_of_student])
+
     def __repr__(self):
         return str(self.id) + ":" + self.name + " " + self.identifier 
     

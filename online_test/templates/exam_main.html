@@ -31,12 +31,12 @@
                 </div>
             </div>
         </div>
-        <div class="content col-9 ms-auto">
+        <div class="content col-12 col-sm-9 ms-auto">
             <header>
                 <div class="question_number">سوال {{question_index}}</div>
                 <div class="time d-flex">
                     <span>زمان باقیمانده :</span>
-                    <ul id="exam_timer" data-unix="{{exam.unix}}" data-duraion="{{ exam.duration }}">
+                    <ul id="exam_timer" data-unix="{{exam.unix}}" data-duration="{{ exam.duration }}">
                         <li><span class="seconds">00</span></li>
                         <li class="seperator">:</li>
                         <li><span class="minutes">00</span></li>
@@ -48,7 +48,7 @@
             <article class="question_box my-4 p-4 ">
                 <p class="qtext mb-4">{{question_index}}.{{question.text}}</p>
                 <div class="row">
-                    <div class="col-8 options_container">
+                    <div class="col-12 col-md-8 options_container">
                         <div class="form-check my-3">
                             <input class="form-check-input" type="radio" name="answer" id="answer1"  autocomplete='off'  value="1" {% if answer and answer == 1 %}checked{% endif %}>
                             <label class="form-check-label" for="answer1">
@@ -75,10 +75,12 @@
                             </label>
                         </div>
                     </div>
-                    <div class="col-4 img_conrainer">
+                    <div class="col-12 col-md-4 img_conrainer border" style="min-height: 200px;">
                         {% if question.image %}
-                        <div class="img" style="background-image: url({{ url_for('static', filename=question.image)}})"></div>
-                        {% endif %}
+                        <a href="{{ url_for('static', filename=question.image)}}" target="_blank">
+                            <div class="img w-100" style="background-image: url({{ url_for('static', filename=question.image)}})"></div>
+                            {% endif %}
+                        </a>
                     </div>
                 </div>
                 <div class="mt-4">

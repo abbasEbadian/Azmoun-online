@@ -50,6 +50,10 @@ body.gray_bg{
 }
 .row{
     margin-left: 0;
+    margin-right: 0;
+}
+td, th{
+    white-space: nowrap;
 }
 /* Navbar Start */
 
@@ -61,6 +65,7 @@ nav.navbar{
     left: 0;
     top: 0;
     z-index: 1;
+    height: 52px;
 }
 .sidebar{
     width: 24%;
@@ -358,6 +363,32 @@ ul#exam_timer li.seperator {
 }
 .pagination li.current .bi-caret-up{
     opacity: 1;
+}
+.sidebar.hided{
+    width: 300px;
+    right: -300px;
+    transition: 0.3s;
+    z-index: 1;
+}
+.sidebar.open.hided{
+    right: 0;
+}
+.sidebar.open.hided >div{
+    box-shadow: -4px 0 11px -4px #5556;
+}
+@media (max-width: 768px){
+    .sidebar{
+        width: 300px;
+        right: -300px;
+        transition: 0.3s;
+        z-index: 1;
+    }
+    .sidebar.open{
+        right: 0;
+    }
+    .sidebar.open >div{
+        box-shadow: -4px 0 11px -4px #5556;
+    }
 }
 @media (min-width: 900px){
     .container.login_container, 

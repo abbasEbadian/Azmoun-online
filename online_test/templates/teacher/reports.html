@@ -9,7 +9,7 @@
             {% with active_tab = 'reports' %}
             {% include '/teacher/teacher_sidebar.html' %}
             {% endwith %}
-            <div class="col-9 content ms-auto">
+            <div class="col-12 col-md-9 content ms-auto">
                 <article class ="" id="reports">
                     <h4 class="my-4 py-4">دانشجویان</h4>
                     {% if not current_user.courses_of_teacher %}
@@ -17,25 +17,27 @@
                             درسی تا به حال انتخاب نشده است.
                         </div>
                     {% else %}
-                        <table class="table table-bordered ">
-                            <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">عنوان درس</th>
-                                <th scope="col">تعداد دانشجویان ثبت نام کرده</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                                {% for course in current_user.courses_of_teacher %}
-                                    <tr>
-                                        <th scope="row">{{ loop.index}}</th>
-                                        <td>{{ course.name }}</td>
-                                        <td>{{ course.enrolled_students.all() | length }}</td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                        <div>
+                                <table class="table table-bordered ">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">عنوان درس</th>
+                                            <th scope="col">تعداد دانشجویان ثبت نام کرده</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+            
+                                            {% for course in current_user.courses_of_teacher %}
+                                                <tr>
+                                                    <th scope="row">{{ loop.index}}</th>
+                                                    <td>{{ course.name }}</td>
+                                                    <td>{{ course.enrolled_students.all() | length }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                        </div>
                     {% endif %}
                 </article>
             </div>

@@ -1,8 +1,9 @@
 {% if current_user.is_authenticated %}
 <nav class="navbar navbar-light bg-main">
   <div class="container-fluid">
+    <button class="bi-list btn-simple fs-2 toggle_sidebar d-block d-md-none" onclick="toggle_sidebar(event)"></button>
     {% if current_user.is_authenticated %}
-      <a class="user text-decoration-none" href="/" >
+      <a class="user text-decoration-none d-none d-md-flex" href="/" >
         <img src="{{url_for('static', filename='img/user.png')}}"  alt="logout" class="d-inline-block align-text-top logout">
         {% if current_user.is_teacher %}
         <span class="me-2">دکتر</span>
@@ -10,15 +11,20 @@
         <span>{{ current_user.name }}</span>
       </a>
     {% endif %}
-    <a class="navbar-brand flex-grow-1 logo justify-content-center " href="#">
+    <a class="navbar-brand flex-grow-1 logo justify-content-center d-none d-md-flex" href="#">
       <img src="{{url_for('static', filename='img/logo.png')}}" alt="logo" class="d-inline-block align-text-top logo">
       سـامـانــــــــه آزمـونـــــــــــ آنلایـنـــــــــــــــــــــــــــ
     </a>
+    <a class="navbar-brand flex-grow-1 logo justify-content-center d-flex d-md-none fs-6" href="#">
+        <img src="{{url_for('static', filename='img/logo.png')}}" alt="logo" class="d-inline-block align-text-top logo" style="width: 32px;height: 32px">
+        سـامـانــه آزمـونــ آنلایـنــــــــــــــــــ
+      </a>
     {% if current_user.is_authenticated %}
-      <a class="logout text-decoration-none" href="/logout" >
+      <a class="logout text-decoration-none d-none d-md-flex"  href="/logout" >
         <img src="{{url_for('static', filename='img/logout.png')}}"  alt="logout" class="d-inline-block align-text-top logout">
         <span>خروج از  حساب کاربری</span>
       </a>
+      
     {% endif %}
   </div>
 </nav>

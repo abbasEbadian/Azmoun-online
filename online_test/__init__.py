@@ -10,7 +10,6 @@ app.config["APP_NAME"] = "online_test"
 app.config["SECRET_KEY"] = "17ab226de066a0f995895791b9e726fbb14042df6583763d1df5084dfc3b53e8"
 app.config["UPLOADS_DEFAULT_DEST"] = app.config["APP_NAME"] + '/static'
 app.config["UPLOADS_DEFAULT_URL"] = app.config["APP_NAME"] + '/static'
-
 app.config["UPLOADED_PROFILEPICS_DEST"] = app.config["UPLOADS_DEFAULT_DEST"] + '/uploads/profile_pics'
 app.config["UPLOADED_QUESTIONPICS_DEST"] = app.config["UPLOADS_DEFAULT_DEST"]+'/uploads/question_pics'
 app.config["UPLOADS_DEFAULT_URL"] = 'uploads/images'

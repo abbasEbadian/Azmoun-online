@@ -7,6 +7,9 @@
     {% endblock  %}
     
     {% block main %}
+        {% with active_tab = 'exam', extra_class="hided"%}
+        {% include '/student/student_sidebar.html' %}
+        {% endwith %}
         <div class="exam_page w-100 h-100 d-flex justify-content-center align-items-center flex-column" >        
             {% if not exam %}
                 <h1 class="text-center">آزمون یافت نشد.</h1>

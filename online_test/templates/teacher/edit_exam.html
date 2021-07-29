@@ -9,7 +9,7 @@
             {% with active_tab = 'edit_exam' %}
             {% include '/teacher/teacher_sidebar.html' %}
             {% endwith %}
-            <div class="col-9 content ms-auto">
+            <div class="col-12 col-md-9 content ms-auto">
                 <article class="" id="edit_exam">
                         <h4 class="my-4 py-4">ویرایش آزمون</h4>
                         {% if exams|length %}
@@ -28,7 +28,7 @@
                                 {{ exam_form.date_unix(id="edit_exam_date_unix") }}
                                 {% set f = exam_form.title.process_data(the_exam.name) %}
                                 {% set f = exam_form.course.process_data(the_exam.course.id) %}
-                                {% set f = exam_form.datetime.process_data(the_exam.jalali_datetime) %}
+                                {# set f = exam_form.datetime.process_data(the_exam.jalali_datetime) #}
                                 {% set f = exam_form.duration.process_data(the_exam.duration) %}
                                 <div class="exam_form form-group row border rounded-3 p-2">
                                     <div class="form-group col-12 col-sm-6  mb-4">
@@ -41,7 +41,7 @@
                                     </div>
                                     <div class="form-group col-12 col-sm-6  mb-4">
                                         <small class="text-muted mb-2">{{ exam_form.datetime.label }}:</small>
-                                        {{ exam_form.datetime(class="form-control", id="datetime") }}
+                                        {{ exam_form.datetime(class="form-control", id="datetime", unix=the_exam.unix) }}
                                     </div>
                                     <div class="form-group col-12 col-sm-6  mb-4">
                                         <small class="text-muted mb-2">{{ exam_form.duration.label }}:</small>
