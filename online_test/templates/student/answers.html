@@ -34,7 +34,7 @@
                                             <td>{{ exam.course.name }}</td>
                                             <td>دکتر {{ exam.course.teacher.name }}</td>
                                             <td>{{ exam.jalali_datetime }}</td>
-                                            <td>{{ exam.get_score(current_user) }}</td>
+                                            <td>{{ exam.get_score(current_user) }} از {{ exam.points }}</td>
                                         </tr>  
                                     {% endfor %}
                                 </tbody>

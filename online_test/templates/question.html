@@ -5,24 +5,24 @@
         <p class="question_number"> سوال شماره {{ question_number }}</p>
         <div class="row col-12 col-sm-6">
             
-            <div class="form-group col-12  h-100 mb-4">
-                <small class="text-muted pb-2 ">متن سوال</small>
+            <div class="form-group col-12  mb-4">
+                <small class="text-muted pb-2 ">{{ qform.question_text.label }}</small>
                 {{ qform.question_text(class="form-control") }}
             </div>
         </div>
         <div class="row col-12 col-sm-6 py-4 ps-md-4">
-                {% if question and question.image  %}
-                    <div class="image_preview" style="background-image: url({{ url_for('static', filename=question.image)}})">
-                        <small class='help_text d-none'>برای تغییر کلیک کنید.</small>
-                    </div>
-                {% else %}
-                    <div class="image_preview" >
-                        <img class="placeholder_image placeholder" src="{{ url_for('static', filename='img/default_img.png')}}" /> 
-                        <small class='placeholder_text placeholder'>افزودن تصویر</small>
-                        <small class='help_text d-none'>برای تغییر کلیک کنید.</small>
-                    </div>
-                {% endif %}
-                {{ qform.image(class="form-control image_input", accept=".png, .jpg") }}
+            {% if question and question.image  %}
+                <div class="image_preview" style="background-image: url({{ url_for('static', filename=question.image)}})">
+                    <small class='help_text d-none'>برای تغییر کلیک کنید.</small>
+                </div>
+            {% else %}
+                <div class="image_preview" >
+                    <img class="placeholder_image placeholder" src="{{ url_for('static', filename='img/default_img.png')}}" /> 
+                    <small class='placeholder_text placeholder'>افزودن تصویر</small>
+                    <small class='help_text d-none'>برای تغییر کلیک کنید.</small>
+                </div>
+            {% endif %}
+            {{ qform.image(class="form-control image_input", accept=".png, .jpg") }}
         </div>
         <div class="answers row col-12">
             <div class="form-group col-12 col-sm-6  mb-4 ">

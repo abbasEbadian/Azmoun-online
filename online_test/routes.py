@@ -246,14 +246,14 @@ def create_new_exam():
     unix = request.form.get("date_unix")
     course = request.form.get("course")
     duration = request.form.get("duration")
-    
+    points = request.form.get("points")
     date = datetime.fromtimestamp(int(unix)//1000)
     course = Course.query.get(int(course))
     similar_date_exams = Exam.query.filter_by(date=date, course_id=course.id).all()
     if similar_date_exams:
         return jsonify({"result": "fail", "cause": "برای این درس در این تاریخ آزمون ثبت شده است."})
         
-    exam = Exam(name=title, duration=duration, date=date, course=course)
+    exam = Exam(name=title, duration=duration, date=date, course=course, points=points)
     db.session.commit()
     return jsonify({"result": "success", "exam_id": exam.id})
 
@@ -419,7 +419,7 @@ def submit_answer(question_id, answer):
 def complete_exam(exam_id):
     exam = Exam.query.get(int(exam_id))
     if exam not in current_user.completed_exams:
-        # current_user.completed_exams.append(exam)
+        current_user.completed_exams.append(exam)
         db.session.commit()
     return jsonify({"result": "success"})
 
@@ -433,6 +433,6 @@ def exam_result(exam_id):
     ans = list(filter(lambda x: x.exam.id == int(exam_id) , current_user.answers))
     currect = sum([a.is_currect for a in ans])
     total = len(exam.questions)
-    point = 12 / (total or 1) * currect 
+    point = exam.get_score(current_user)
 
     return render_template("exam_result.html", point=point, exam=exam, currect=currect, total=total)

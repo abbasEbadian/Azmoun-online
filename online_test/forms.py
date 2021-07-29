@@ -61,5 +61,6 @@ class ExamForm(FlaskForm):
     datetime = StringField("تاریخ برگزاری", render_kw={"autocomplete": "off"})
     duration = IntegerField("مهلت آزمون ( دقیقه )", render_kw={"autocomplete": "off"})
     date_unix = HiddenField("", id="date_unix",validators=[DataRequired(message='تاریخ پایان نمیتواند خالی باشد.')])
+    points = IntegerField('نمره از:', validators=[DataRequired(message=empty_message)], render_kw={"placeholder": "8", "autocomplete": "off"})
 
     

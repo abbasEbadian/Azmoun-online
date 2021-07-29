@@ -36,7 +36,7 @@
                                                     <td>{{ exam.duration }} دقیقه</td>
                                                     {% if exam in current_user.completed_exams %}
                                                         <td>
-                                                            نمره: {{ exam.get_score(current_user) }}
+                                                            نمره: {{ exam.get_score(current_user) }} از {{ exam.points }}
                                                         </td>
                                                     {% elif exam.unix | not_started %}
                                                         <td class="countdown_counter" data-unix="{{ exam.unix }}">

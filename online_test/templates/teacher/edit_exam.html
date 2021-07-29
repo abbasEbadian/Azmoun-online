@@ -30,6 +30,7 @@
                                 {% set f = exam_form.course.process_data(the_exam.course.id) %}
                                 {# set f = exam_form.datetime.process_data(the_exam.jalali_datetime) #}
                                 {% set f = exam_form.duration.process_data(the_exam.duration) %}
+                                {% set f = exam_form.points.process_data(the_exam.points) %}
                                 <div class="exam_form form-group row border rounded-3 p-2">
                                     <div class="form-group col-12 col-sm-6  mb-4">
                                         <small class="text-muted mb-2">{{ exam_form.title.label }}:</small>
@@ -47,7 +48,11 @@
                                         <small class="text-muted mb-2">{{ exam_form.duration.label }}:</small>
                                         {{ exam_form.duration(class="form-control", id="duration") }}
                                     </div>
-                                    <div class="form-group col-12 col-sm-6  mb-2">
+                                    <div class="form-group col-12 col-sm-6  mb-4">
+                                        <small class="text-muted mb-2">{{ exam_form.points.label }}</small>
+                                        {{ exam_form.points(class="form-control", id="points") }}
+                                    </div>
+                                    <div class="form-group col-12 col-sm-6  d-flex align-items-center ">
                                         <button type="submit" class="btn btn-primary confirm_exam ">تایید </button>
                                         <button type="button" class="btn btn-danger delete_exam ">  حذف آزمون </button>
                                     </div>

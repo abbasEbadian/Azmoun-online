@@ -71,6 +71,7 @@ class Exam(db.Model):
     questions = db.relationship("Question", backref="exam")
     answers = db.relationship("Answer", backref="exam")
     date = db.Column(db.DateTime)
+    points = db.Column(db.Integer)
     create_date = db.Column(db.DateTime, default=datetime.utcnow)
 
     @property
@@ -111,7 +112,7 @@ class Exam(db.Model):
     def get_score(self, user):
         ans = list(filter(lambda x: x.student == user, self.answers))
         score = sum([x.is_currect for x in ans]) / (len(ans) or 1)
-        return 12 * score
+        return self.points * score
 
 class Question(db.Model):
     id = db.Column(db.Integer, primary_key=True)
