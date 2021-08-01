@@ -8,6 +8,7 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database/db.db"
 app.config["APP_NAME"] = "online_test"
 app.config["SECRET_KEY"] = "17ab226de066a0f995895791b9e726fbb14042df6583763d1df5084dfc3b53e8"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 app.config["UPLOADS_DEFAULT_DEST"] = app.config["APP_NAME"] + '/static'
 app.config["UPLOADS_DEFAULT_URL"] = app.config["APP_NAME"] + '/static'
 app.config["UPLOADED_PROFILEPICS_DEST"] = app.config["UPLOADS_DEFAULT_DEST"] + '/uploads/profile_pics'
@@ -27,12 +28,12 @@ from online_test.routes import *
 from online_test.models import *
 from  . import filter_templates
 app.jinja_env.globals['get_question_template'] = get_question_template
-if not User.query.all():
+if  not User.query.all():
     admin = User(name="ادمین", identifier="admin", user_type="admin", password=bcrypt.generate_password_hash("admin"))
     t1 = User(name="عزیز حنیفی", identifier="111112222", user_type="teacher", password=bcrypt.generate_password_hash("111112222"))
     t2 = User(name="ماهی", identifier="222223333", user_type="teacher", password=bcrypt.generate_password_hash("222223333"))
     s1 = User(name="میلاد درخشی", identifier="555554444", user_type="student", password=bcrypt.generate_password_hash("555554444"))
-    s2 = User(name="امیررضا اصغری", identifier="666667777", user_type="student", password=bcrypt.generate_password_hash("666667777"))
+    s2 = User(name="امیر اصغری", identifier="666667777", user_type="student", password=bcrypt.generate_password_hash("666667777"))
     c1 = Course(name="شبکه کامپیوتری", units=3)
     c2 = Course(name="ساختمان داده", units=3)
     db.session.add_all([admin, t1, t2, s1, s2, c1, c2])
