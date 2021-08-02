@@ -4,7 +4,7 @@ from flask import render_template, request, flash, redirect, url_for, jsonify, g
 import json, os
 from online_test.models import User, Course, Exam, Question, Answer
 from online_test.forms import (RegisterForm, LoginForm, QuestionForm, ExamForm,
-                                EmailResetRequestForm, ResetPasswordForm)
+                                EmailResetRequestForm, ResetPasswordForm, ProfileForm)
 from sqlalchemy import desc, or_
 from online_test import db, app, bcrypt, profile_pics, question_pics, mail
 from flask_login import login_user, current_user, logout_user, login_required
@@ -43,7 +43,7 @@ def admin():
     return render_template('admin.html', **data)
 
 @app.route('/teacher/<menu_name>/<param1>')
-@app.route('/teacher/<menu_name>')
+@app.route('/teacher/<menu_name>', methods=["POST", "GET"])
 @app.route('/teacher')
 @login_required
 def teacher(menu_name=None, param1=None): 
@@ -71,11 +71,20 @@ def teacher(menu_name=None, param1=None):
             data["the_exam"] = editable_exam
             if editable_exam.course.teacher.id != current_user.id:
                 return forbidden403(403)
+    if menu_name == 'profile':
+        pform = ProfileForm()
+        data["pform"] = pform
+        if pform.validate_on_submit():
+            if pform.name.data!=current_user.name or current_user.email!=pform.email.data:
+                flash("با موفقیت بروز شد.", "info")
+            current_user.name =  pform.name.data
+            current_user.email =  pform.email.data
+            db.session.commit()
     return render_template(f"/teacher/{menu_name}.html", **data)
 
 
 @app.route('/student/<menu_name>/<param1>')
-@app.route('/student/<menu_name>')
+@app.route('/student/<menu_name>', methods=["POST", "GET"])
 @app.route('/student/')
 @login_required
 def student(menu_name=None, param1=None):
@@ -92,11 +101,15 @@ def student(menu_name=None, param1=None):
     for c in current_user.courses_of_student:
         exams += c.exams
     data["exams"] = exams
-    # if param1:
-    #     editable_exam = Exam.query.get(param1)
-    #     data["the_exam"] = editable_exam
-    #     if editable_exam.course.teacher.id != current_user.id:
-    #         return forbidden403(403)
+    if menu_name == 'profile':
+        pform = ProfileForm()
+        data["pform"] = pform
+        if pform.validate_on_submit():
+            if pform.name.data!=current_user.name or current_user.email!=pform.email.data:
+                flash("با موفقیت بروز شد.", "info")
+            current_user.name =  pform.name.data
+            current_user.email =  pform.email.data
+            db.session.commit()
     return render_template(f"/student/{menu_name}.html", **data)
 
 

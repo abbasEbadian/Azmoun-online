@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block title %} 
+     استاد - پروفایل
+{% endblock %}
+
+{% block main %}
+    <main class="admin_dashboard h-100">
+        <div class="row m-0  h-100">
+            {% with active_tab = 'profile' %}
+            {% include '/student/student_sidebar.html' %}
+            {% endwith %}
+            <div class="col-12 col-md-9 content ms-auto">
+                <article class ="" id="reports">
+                    <h4 class="my-4 py-4">حساب کاربری</h4>
+                    {% set p = pform.email.process_data(current_user.email) %}
+                    {% set p = pform.name.process_data(current_user.name) %}
+                    {% set p = pform.identifier.process_data(current_user.identifier) %}
+                    <form action="" method="POST" class="profile_container">
+                        {{ pform.hidden_tag() }}
+                        <div class="form-group mb-4">
+                            {{ pform.name.label(class="form-control-label pb-2") }}
+                            {%if pform.name.errors %}
+                                <div class="input-group mb-3 iconed-input-group bg-none shadow-md is-invalid">
+                                    <div class="input-group-prepend">
+                                        <span class="icon input-group-text bi-person h-100 fs-4 text-black-50 bg-white" id="basic-addon1"></span>
+                                    </div>
+                                    {{ pform.name(class="form-control form-control-lg  ") }}
+    
+                                </div>
+                                <div class="invalid-feedback ">
+                                    {% for error in pform.name.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {%else%}
+                            <div class="input-group mb-3 iconed-input-group bg-none shadow-md">
+                                <div class="input-group-prepend">
+                                    <span class="icon input-group-text bi-person  h-100 fs-4 text-black-50 bg-white" id="basic-addon1"></span>
+                                </div>
+                                {{ pform.name(class="form-control form-control-lg ") }}
+                            </div>
+                            {%endif%}
+                        </div>
+                        <div class="form-group mb-4">
+                            {{ pform.email.label(class="form-control-label pb-2") }}
+                            {%if pform.email.errors %}
+                                <div class="input-group mb-3 iconed-input-group bg-none shadow-md is-invalid">
+                                    <div class="input-group-prepend">
+                                        <span class="icon input-group-text bi-envelope h-100 fs-4 text-black-50 bg-white" id="basic-addon1"></span>
+                                    </div>
+                                    {{ pform.email(class="form-control form-control-lg ") }}
+    
+                                </div>
+                                <div class="invalid-feedback ">
+                                    {% for error in pform.email.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {%else%}
+                            <div class="input-group mb-3 iconed-input-group bg-none shadow-md">
+                                <div class="input-group-prepend">
+                                    <span class="icon input-group-text bi-envelope  h-100 fs-4 text-black-50 bg-white" id="basic-addon1"></span>
+                                </div>
+                                {{ pform.email(class="form-control form-control-lg ") }}
+                            </div>
+                            {%endif%}
+                        </div>
+                        <div class="form-group mb-4">
+                            {{ pform.identifier.label(class="form-control-label pb-2") }}
+                            {% if pform.identifier.errors %}
+                                <div class="input-group mb-3 iconed-input-group bg-none shadow-md is-invalid">
+                                    <div class="input-group-prepend">
+                                        <span class="icon input-group-text bi-person-badge h-100 fs-4 text-black-50 bg-white" id="basic-addon1"></span>
+                                    </div>
+                                    {{ pform.identifier(class="form-control form-control-lg  is-invalid") }}
+    
+                                </div>
+                                <div class="invalid-feedback ">
+                                    {% for error in pform.identifier.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {%else%}
+                            <div class="input-group mb-3 iconed-input-group bg-none shadow-md">
+                                <div class="input-group-prepend">
+                                    <span class="icon input-group-text bi-person-badge  h-100 fs-4 text-black-50 bg-white" id="basic-addon1"></span>
+                                </div>
+                                {{ pform.identifier(class="form-control form-control-lg disabled") }}
+                            </div>
+                            {%endif%}
+                        </div>
+                        {{ pform.submit(class="btn btn-main btn-lg")}}
+                    </form>
+                    {% with messages = get_flashed_messages(with_categories=True) %}
+                        {% for c, m in messages %}
+                            <div class="alert alert-{{ c }} mt-4 ">{{ m }}</div>
+                        {% endfor %}
+                    {% endwith %}
+                </article>
+            </div>
+        </div>
+    </main>
+{% endblock %}
