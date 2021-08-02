@@ -29,7 +29,7 @@ class RegisterForm(FlaskForm):
         if user:
             raise ValidationError("این نام کاربری قبلا ثبت شده است.")
         
-    def validate_phone(self, email):
+    def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user:
             raise ValidationError("این شماره همراه قبلا ثبت شده است.")
@@ -83,3 +83,18 @@ class EmailResetRequestForm(FlaskForm):
         user = User.query.filter_by(email=form.email.data).first()
         if user is None:
             raise ValidationError("ایمیل وارد شده صحیح نمی باشد.")
+
+class ProfileForm(FlaskForm):
+    email = EmailField('ایمیل',
+    validators=[DataRequired(message=empty_message), length(min=10, max=100, message=length_message.format(10))],
+    render_kw={"placeholder": "example@domain.com"})
+    name = StringField('نام و نام خانوادگی', validators=[DataRequired(message=empty_message), length(min=5, max=100, message=length_message.format(5))])
+    identifier = StringField('شماره دانشجویی',render_kw={ "disabled":"disabled"})
+    
+    submit = SubmitField('بروزرسانی')
+
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if user and user != current_user:
+            raise ValidationError("این ایمیل قبلا ثبت شده است.")
+        
