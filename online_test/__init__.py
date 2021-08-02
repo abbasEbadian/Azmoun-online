@@ -19,9 +19,9 @@ app.config["UPLOADS_DEFAULT_URL"] = 'uploads/images'
 app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = "abbasebadiann@gmail.com"
-app.config['MAIL_SENDER'] = "support@azmoun-online.ir"
-app.config['MAIL_PASSWORD'] = "Ae@13731124" 
+app.config['MAIL_USERNAME'] = "azmoun.online.supp@gmail.com"
+app.config['MAIL_SENDER'] = "azmoun.online.supp@gmail.com"
+app.config['MAIL_PASSWORD'] = "85CELusejuAq67X" 
 
 
 
