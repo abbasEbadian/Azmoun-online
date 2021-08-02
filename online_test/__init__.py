@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_uploads import configure_uploads, IMAGES, UploadSet
+from flask_mail import Mail
 import os
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database/db.db"
@@ -14,10 +15,20 @@ app.config["UPLOADS_DEFAULT_URL"] = app.config["APP_NAME"] + '/static'
 app.config["UPLOADED_PROFILEPICS_DEST"] = app.config["UPLOADS_DEFAULT_DEST"] + '/uploads/profile_pics'
 app.config["UPLOADED_QUESTIONPICS_DEST"] = app.config["UPLOADS_DEFAULT_DEST"]+'/uploads/question_pics'
 app.config["UPLOADS_DEFAULT_URL"] = 'uploads/images'
+
+app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = "abbasebadiann@gmail.com"
+app.config['MAIL_SENDER'] = "support@azmoun-online.ir"
+app.config['MAIL_PASSWORD'] = "Ae@13731124" 
+
+
+
 profile_pics = UploadSet('profilepics', IMAGES)
 question_pics = UploadSet('questionpics', IMAGES)
 configure_uploads(app, (profile_pics, question_pics))
-
+mail = Mail(app)
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
@@ -28,7 +39,7 @@ from online_test.routes import *
 from online_test.models import *
 from  . import filter_templates
 app.jinja_env.globals['get_question_template'] = get_question_template
-if  not User.query.all():
+if not User.query.all():
     admin = User(name="ادمین", identifier="admin", user_type="admin", password=bcrypt.generate_password_hash("admin"))
     t1 = User(name="عزیز حنیفی", identifier="111112222", user_type="teacher", password=bcrypt.generate_password_hash("111112222"))
     t2 = User(name="ماهی", identifier="222223333", user_type="teacher", password=bcrypt.generate_password_hash("222223333"))

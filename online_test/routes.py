@@ -3,16 +3,19 @@ from online_test import app
 from flask import render_template, request, flash, redirect, url_for, jsonify, g
 import json, os
 from online_test.models import User, Course, Exam, Question, Answer
-from online_test.forms import RegisterForm, LoginForm, QuestionForm, ExamForm
+from online_test.forms import (RegisterForm, LoginForm, QuestionForm, ExamForm,
+                                EmailResetRequestForm, ResetPasswordForm)
 from sqlalchemy import desc, or_
-from online_test import db, app, bcrypt, profile_pics, question_pics
+from online_test import db, app, bcrypt, profile_pics, question_pics, mail
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime, timedelta
 from datetime import date as ddate
-
+from flask_mail import Message
 @app.route("/")
 @login_required
 def home():
+    if not current_user.is_authenticated:
+        return redirect(url_for(login))
     return redirect(url_for(current_user.user_type))
 
 @app.errorhandler(404)
@@ -109,7 +112,7 @@ def register():
             "name": form.name.data,
             "identifier": form.identifier.data,
             "password": hash_pwd,
-            "phone": form.phone.data,
+            "email": form.email.data,
             "user_type": not last_id and 'admin' or  form.is_teacher.data and 'teacher' or 'student' 
         }
         user = User(**new_user)
@@ -129,13 +132,14 @@ def login():
         return redirect(url_for(current_user.user_type))
 
     form = LoginForm()
-    user = User.query.filter(or_(User.identifier==form.identifier.data,User.phone==form.identifier.data)).first()
+    user = User.query.filter(or_(User.identifier==form.identifier.data,User.email==form.identifier.data)).first()
     if form.validate_on_submit():
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             return redirect(url_for(user.user_type))
         else:
             flash("شماره دانشجویی یا رمز عبور اشتباه است", 'danger')
+
     data = {
         "body_class" : "gray_bg"
     }
@@ -436,3 +440,43 @@ def exam_result(exam_id):
     point = exam.get_score(current_user)
 
     return render_template("exam_result.html", point=point, exam=exam, currect=currect, total=total)
+
+def send_reset_email(user):
+    token = user.get_reset_token()
+    msg = Message("لینک بازنشانی رمز عبور", sender=app.config['MAIL_SENDER'], recipients=[user.email])
+    msg.body = f'''
+برای بازنشانی رمز عبور خود به لینک زیر مراجعه کنید:
+{url_for('reset_password', token=token, _external=True) }
+    '''
+    mail.send(msg)
+    print("sent")
+
+@app.route("/reset_password_request", methods=["POST", "GET"])
+def reset_password_request():
+    form = EmailResetRequestForm()
+    print("CAME 1", form.validate_on_submit())
+    print(form.errors)
+    if form.validate_on_submit():
+        print("CAME")
+        user = User.query.filter_by(email=form.email.data).first()
+        send_reset_email(user)
+        flash("لینک بازنشانی رمز عبور به ایمیل شما ارسال شد.", 'info')
+        return redirect(url_for('login'))
+    
+    return render_template('reset_password_request.html', form=form)
+
+@app.route("/reset_password/<token>", methods=["POST", "GET"])
+def reset_password(token):
+    user = User.verify_reset_token(token)
+    if not user:
+        flash("کلید نامعتبر است یا منقضی شده است.", 'warning')
+        return redirect(url_for('reset_password_request'))
+
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        hash_pwd = bcrypt.generate_password_hash(form.password1.data)
+        user. password = hash_pwd
+        db.session.commit()
+        flash("رمز شما با موفقی تغییر یافت.", 'success')
+        return redirect(url_for("login"))
+    return render_template('reset_password.html', form=form)

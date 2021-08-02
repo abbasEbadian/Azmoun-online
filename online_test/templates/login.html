@@ -66,19 +66,19 @@
                     </div>
                     {{ form.submit(class="btn btn-main btn-lg w-100") }}
                     <div class="form-group mt-4">
-                       
                     </div>
-                  
                     <div class="form-group  mb-2 d-flex   justify-content-between align-items-center flex-wrap">
                         <div class="col-12 col-sm-6  text-sm-end order-sm-2 mb-3">
                             {{ form.remember() }}
                             {{ form.remember.label(class="form-control-label") }}
                         </div>     
-                        <small class="text-muted col-12 col-sm-6  order-sm-1 mb-3">
+                        <small class="text-muted col-12 col-sm-6  order-sm-3 mb-3">
                             حساب جدید نیاز دارید؟
                             <a class="mr-2" href="{{ url_for('register') }}">بسازید !</a>
-                        </small>
-                                           
+                        </small>   
+                        <small class="text-muted col-12 col-sm-6  order-sm-1 mb-3 text-start">
+                            <a class="mr-2" href="{{ url_for('reset_password_request') }}">بازیابی رمز عبور</a>
+                        </small>          
                     </div>
                 </fieldset>
                 {% with messages = get_flashed_messages(with_categories=True)%}

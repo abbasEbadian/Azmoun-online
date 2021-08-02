@@ -1,7 +1,8 @@
 from datetime import datetime, time
-from online_test import db, login_manager
+from online_test import db, login_manager, app
 from flask_login import UserMixin
 import jdatetime
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 DATE_FORMAT = "%Y/%m/%d"
 TIME_FORMAT = "%H:%M"
 DATETIME_FORMAT = DATE_FORMAT + " " + TIME_FORMAT
@@ -25,7 +26,7 @@ class User(db.Model, UserMixin):
     identifier = db.Column(db.String(10), nullable=False, unique=True)
     user_type = db.Column(db.String(30), default='student')
     password = db.Column(db.String(32), nullable=False)
-    phone = db.Column(db.String(32))
+    email = db.Column(db.String(50))
     answers = db.relationship("Answer", backref="student")
     courses_of_teacher = db.relationship('Course', backref="teacher")
     courses_of_student = db.relationship('Course', secondary=enrolls, backref=db.backref("enrolled_students", lazy="dynamic"))
@@ -46,6 +47,19 @@ class User(db.Model, UserMixin):
 
     def units_count(self):
         return sum([x.units for x in self.courses_of_student])
+
+    def get_reset_token(self, expire_seconds=1800):
+        s = Serializer(app.config['SECRET_KEY'], expire_seconds)
+        return s.dumps({'user_id': self.id}).decode('utf-8')
+
+    @staticmethod
+    def verify_reset_token(token):
+        s = Serializer(app.config['SECRET_KEY'])
+        try:
+            user_id = s.loads(token)['user_id']
+        except :
+            return None
+        return User.query.get(int(user_id))
 
     def __repr__(self):
         return str(self.id) + ":" + self.name + " " + self.identifier 

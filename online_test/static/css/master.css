@@ -392,7 +392,8 @@ ul#exam_timer li.seperator {
 }
 @media (min-width: 900px){
     .container.login_container, 
-    .container.register_container{
+    .container.register_container,
+    .reset_password_request{
         width: 50% ;
     }
     .next_prev{
